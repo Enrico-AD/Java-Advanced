@@ -38,35 +38,18 @@ public class MotorcycleController {
         return "motorcycle/motorcycle-list :: motorcycle-list";
     }
 
-    @PostMapping("/{id}/update")
-    public String update(
-            @PathVariable Integer id,
-            @ModelAttribute MotorcycleDTO dto,
-            Model model,
-            HttpServletRequest request) {
-
-        motorcycleService.updateDTO(id, dto);
-
-        boolean ajax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
-        if (ajax) {
-            model.addAttribute("motorcycles", motorcycleService.findAll());
-            return "motorcycle/motorcycle-list :: motorcycle-list"; // fragmento parcial
-        } else {
-            return "redirect:/motorcycle/page"; // a view completa da lista (ajuste para sua rota)
-        }
+    @PostMapping("/new")
+    public String create(@ModelAttribute MotorcycleDTO dto, Model model) {
+        motorcycleService.save(dto);
+        model.addAttribute("motorcycles", motorcycleService.findAll());
+        return "motorcycle/motorcycle-list :: motorcycle-list";
     }
 
-    @PostMapping("/new")
-    public String create(@ModelAttribute MotorcycleDTO dto, Model model, HttpServletRequest request) {
-        motorcycleService.save(dto);
-
-        boolean ajax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
-        if (ajax) {
-            model.addAttribute("motorcycles", motorcycleService.findAll());
-            return "motorcycle/motorcycle-list :: motorcycle-list";
-        } else {
-            return "redirect:/motorcycle/page"; // ou onde estiver a listagem completa
-        }
+    @PostMapping("/{id}/update")
+    public String update(@PathVariable Integer id, @ModelAttribute MotorcycleDTO dto, Model model) {
+        motorcycleService.updateDTO(id, dto);
+        model.addAttribute("motorcycles", motorcycleService.findAll());
+        return "motorcycle/motorcycle-list :: motorcycle-list";
     }
 
     @GetMapping("/{id}/edit")

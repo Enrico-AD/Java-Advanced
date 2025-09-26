@@ -1,28 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="${title} ?: 'Mottu'">Mottu</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-</head>
-<body>
-<header>
-    <nav>
-        <a th:href="@{/}">Home</a> |
-        <a th:href="@{/addresses}">Addresses</a> |
-        <a th:href="@{/patios}">Yards</a> |
-        <a th:href="@{/modelos}">Models</a> |
-        <a th:href="@{/locatarios}">Tenants</a> |
-        <a th:href="@{/motorcycles}">Motorcycles</a> |
-        <a th:href="@{/rfids}">RFIDs</a> |
-        <a th:href="@{/contratos}">Contracts</a> |
-        <a th:href="@{/status}">Status</a> |
-        <a th:href="@{/logout}">Logout</a>
-    </nav>
-</header>
-<main>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<header th:fragment="mainHeader"
+        th:if="${#httpServletRequest.requestURI != '/login'}"
+        style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #ccc;">
+    <h1>Minha Aplicação</h1>
 
-</main>
-<footer><p>Mottu - demo</p></footer>
-</body>
+    <div sec:authorize="isAnonymous()">
+        <a th:href="@{/login}"><button>Login</button></a>
+    </div>
+
+    <div sec:authorize="isAuthenticated()">
+        <span>Bem-vindo, <b sec:authentication="name"></b>!</span>
+        <a th:href="@{/logout}"><button>Sair</button></a>
+    </div>
+</header>
 </html>

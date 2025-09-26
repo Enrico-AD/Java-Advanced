@@ -1,25 +1,37 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="pt">
 <head>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <script src="/js/scripts.js"></script>
-
-    <meta name="_csrf" th:content="${_csrf.token}"/>
-    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-
 </head>
+<header style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #ccc;">
+    <h1>Minha Aplicação</h1>
+
+    <div sec:authorize="isAnonymous()">
+        <a th:href="@{/login}">
+            <button>Login</button>
+        </a>
+    </div>
+
+    <div sec:authorize="isAuthenticated()">
+        <span>Bem-vindo, <b sec:authentication="name"></b>!</span>
+        <a th:href="@{/logout}">
+            <button>Sair</button>
+        </a>
+    </div>
+</header>
 <body>
 <div class="stocks-container">
 
     <div class="tabs">
         <button class="tab-button"
-                hx-get="/list/motorcycle"
+                hx-get="/motorcycle/list"
                 hx-target="#stocks-list"
                 hx-swap="innerHTML">
             Motos
         </button>
 
-        <button class="tab-button"
+        <button sec:authorize="hasRole('ROLE_ADMIN')"  class="tab-button"
                 hx-get="/list/contracts"
                 hx-target="#stocks-list"
                 hx-swap="innerHTML">
