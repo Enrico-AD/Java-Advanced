@@ -1,0 +1,35 @@
+<div th:fragment="user-list-dialog" class="modal-dialog-centered" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="modal-content p-3 shadow-sm rounded">
+        <div class="modal-header">
+            <h5 class="modal-title">Usuários Cadastrados</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close" onclick="closeDialog()"></button>
+        </div>
+        <div class="modal-body">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    th:each="u : ${users}">
+                    <div>
+                        <strong th:text="${u.username}"></strong>
+                        <small class="text-muted ms-2" th:text="${u.role}"></small>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-danger btn-sm"
+                                th:hx-post="@{/users/{id}/delete(id=${u.id})}"
+                                hx-target="#dialog"
+                                hx-swap="innerHTML">
+                            🗑
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm"
+                                th:hx-post="@{/users/{id}/promote(id=${u.id})}"
+                                hx-target="#dialog"
+                                hx-swap="innerHTML"
+                                th:disabled="${u.role == 'ROLE_ADMIN'}">
+                            ⬆️
+                        </button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

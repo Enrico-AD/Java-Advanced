@@ -1,17 +1,35 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<header th:fragment="mainHeader"
-        th:if="${#httpServletRequest.requestURI != '/login'}"
-        style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #ccc;">
-    <h1>Java Advanced</h1>
+<div th:fragment="app-header" class="d-flex justify-content-between align-items-center p-3 shadow-sm bg-light"
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-    <div sec:authorize="isAnonymous()">
-        <a th:href="@{/login}"><button>Login</button></a>
-    </div>
+    <h3 class="fw-bold text-primary mb-0">Minha Aplicação</h3>
 
-    <div sec:authorize="isAuthenticated()">
-        <span>Bem-vindo, <b sec:authentication="name"></b>!</span>
-        <a th:href="@{/logout}"><button>Sair</button></a>
+    <div class="d-flex align-items-center gap-3">
+
+        <div sec:authorize="isAuthenticated()">
+            <span class="fs-5 fw-semibold text-dark me-2">
+                👤 <span th:text="${#authentication.name}">usuário</span>
+            </span>
+            <small class="text-muted" th:text="${#authentication.principal.authorities[0].authority}"></small>
+        </div>
+
+        <div sec:authorize="!isAuthenticated()">
+            <a href="/login" class="btn btn-outline-primary">Login</a>
+        </div>
+
+        <div sec:authorize="hasRole('ADMIN')">
+            <button class="btn btn-outline-secondary"
+                    hx-get="@{/users/list}"
+                    hx-target="#dialog"
+                    hx-swap="innerHTML">
+                ☰
+            </button>
+        </div>
+
+        <div sec:authorize="isAuthenticated()">
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-danger">Sair</button>
+            </form>
+        </div>
     </div>
-</header>
-</html>
+</div>

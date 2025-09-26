@@ -1,80 +1,67 @@
-<div id="dialog" th:fragment="motorcycle-form" class="custom-modal-overlay" xmlns:th="http://www.w3.org/1999/xhtml">
-    <div class="custom-modal">
+<div th:fragment="motorcycle-form" xmlns:th="http://www.w3.org/1999/xhtml">
 
-        <div th:replace="fragments/error :: error-message"></div>
+    <div th:replace="fragments/error :: error-message"></div>
 
-        <div class="custom-modal-header">
-            <h2 th:text="${motorcycle.id != null ? 'Editar Moto ' + motorcycle.licensePlate : 'Nova Moto'}"></h2>
-            <button class="custom-close-btn" onclick="document.getElementById('dialog').innerHTML=''">✕</button>
-        </div>
+    <div class="modal-header">
+        <h5 class="modal-title"
+            th:text="${motorcycle.id != null ? 'Editar Moto ' + motorcycle.licensePlate : 'Nova Moto'}">
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
 
+    <form th:object="${motorcycle}"
+          th:action="@{${motorcycle.id} != null ? '/motorcycle/' + ${motorcycle.id} + '/update' : '/motorcycle/new'}"
+          method="post"
+          hx-post="@{${motorcycle.id} != null ? '/motorcycle/' + ${motorcycle.id} + '/update' : '/motorcycle/new'}"
+          hx-target="#motorcycles-list"
+          hx-swap="innerHTML"
+          data-bs-dismiss="modal">
 
-        <div class="custom-modal-body">
-            <div class="custom-section">
+        <div class="modal-body">
+            <input type="hidden" th:field="*{id}"/>
 
-                <form th:object="${motorcycle}"
-                      th:action="@{${motorcycle.id} != null ? '/motorcycle/' + ${motorcycle.id} + '/update' : '/motorcycle/new'}"
-                      method="post"
-                      onsubmit="submitMotorcycleForm(event, this)">
+            <div class="mb-3">
+                <label class="form-label">Placa</label>
+                <input type="text" th:field="*{licensePlate}" class="form-control" required/>
+            </div>
 
-                    <input type="hidden" th:field="*{id}" />
+            <div class="mb-3">
+                <label class="form-label">Chassi</label>
+                <input type="text" th:field="*{chassis}" class="form-control" required/>
+            </div>
 
-                    <div class="form-group">
-                        <label>Placa</label>
-                        <input type="text" th:field="*{licensePlate}" required/>
-                    </div>
+            <div class="mb-3">
+                <label class="form-label">Número do motor</label>
+                <input type="text" th:field="*{engineNumber}" class="form-control" required/>
+            </div>
 
-                    <div class="form-group">
-                        <label>Chassi</label>
-                        <input type="text" th:field="*{chassis}" required/>
-                    </div>
+            <div class="mb-3">
+                <label class="form-label">Modelo</label>
+                <select th:field="*{model}" class="form-select" required>
+                    <option value="">-- Selecione um modelo --</option>
+                    <option th:each="m : ${models}" th:value="${m.name}" th:text="${m.name}"></option>
+                </select>
+            </div>
 
-                    <div class="form-group">
-                        <label>Número do motor</label>
-                        <input type="text" th:field="*{engineNumber}" required/>
-                    </div>
+            <div class="mb-3">
+                <label class="form-label">Pátio</label>
+                <select th:field="*{yard.id}" class="form-select" required>
+                    <option value="">-- Selecione um pátio --</option>
+                    <option th:each="yard : ${yards}" th:value="${yard.id}" th:text="${yard.name}"></option>
+                </select>
+            </div>
 
-                    <div class="form-group">
-                        <label>Modelo</label>
-                        <select th:field="*{model}" required>
-                            <option value="">-- Selecione um modelo --</option>
-                            <option th:each="m : ${models}"
-                                    th:value="${m.name}"
-                                    th:text="${m.name}">
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Pátio</label>
-                        <select th:field="*{yard.id}" required>
-                            <option value="">-- Selecione um pátio --</option>
-                            <option th:each="yard : ${yards}"
-                                    th:value="${yard.id}"
-                                    th:text="${yard.name}">
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select th:field="*{status}">
-                            <option th:each="s : ${statuses}"
-                                    th:value="${s}"
-                                    th:text="${s}">
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="custom-modal-footer">
-                        <button type="submit" class="btn btn-primary">Salvar</button>
-                        <button type="button" class="btn btn-secondary"
-                                onclick="document.getElementById('dialog').innerHTML = ''">
-                            Cancelar
-                        </button>
-                    </div>
-                </form>
+            <div class="mb-3">
+                <label class="form-label">Status</label>
+                <select th:field="*{status}" class="form-select">
+                    <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+                </select>
             </div>
         </div>
-    </div>
+
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+    </form>
 </div>

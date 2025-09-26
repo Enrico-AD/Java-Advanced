@@ -1,9 +1,9 @@
 <div th:fragment="motorcycle-list" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
     <div id="motorcycles-list">
 
-        <div th:replace="fragments/list-header :: list-header('+ Incluir Moto', @{/motorcycle/new})"></div>
+        <div th:replace="fragments/list-header :: list-header('Nova Moto', @{/motorcycle/new})"></div>
 
-        <table>
+        <table class="table table-striped">
             <thead>
             <tr>
                 <th>ID</th>
@@ -23,9 +23,12 @@
                 <td th:text="${moto.yard.name}">Pátio 1</td>
                 <td>
                     <button sec:authorize="isAuthenticated()"
+                            class="btn btn-sm btn-info"
                             th:hx-get="@{/motorcycle/{id}/details(id=${moto.id})}"
-                            hx-target="#dialog"
-                            hx-swap="innerHTML">
+                            hx-target="#modalContent"
+                            hx-swap="innerHTML"
+                            data-bs-toggle="modal"
+                            data-bs-target="#mainModal">
                         Ver detalhes
                     </button>
                 </td>
