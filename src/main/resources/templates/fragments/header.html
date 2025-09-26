@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title} ?: 'Mottu'">Mottu</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header>
+    <nav>
+        <a th:href="@{/}">Home</a> |
+        <a th:href="@{/addresses}">Addresses</a> |
+        <a th:href="@{/patios}">Yards</a> |
+        <a th:href="@{/modelos}">Models</a> |
+        <a th:href="@{/locatarios}">Tenants</a> |
+        <a th:href="@{/motorcycles}">Motorcycles</a> |
+        <a th:href="@{/rfids}">RFIDs</a> |
+        <a th:href="@{/contratos}">Contracts</a> |
+        <a th:href="@{/status}">Status</a> |
+        <a th:href="@{/logout}">Logout</a>
+    </nav>
+</header>
+<main>
+
+</main>
+<footer><p>Mottu - demo</p></footer>
+</body>
+</html>

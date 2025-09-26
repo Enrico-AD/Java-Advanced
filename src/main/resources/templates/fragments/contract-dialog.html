@@ -1,0 +1,48 @@
+<div th:fragment="contract-dialog" class="custom-modal-overlay" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="custom-modal">
+
+        <div class="custom-modal-header">
+            <h2>Contrato [[${contract.contractNumber}]]</h2>
+            <button class="custom-close-btn" onclick="document.getElementById('dialog').innerHTML=''">✕</button>
+        </div>
+
+        <div class="custom-modal-body">
+
+            <div class="custom-section">
+                <h3>Informações</h3>
+                <div class="row"><span>Data de início</span><span>[[${contract.startDate}]]</span></div>
+                <div class="row"><span>Data de término</span><span>[[${contract.endDate}]]</span></div>
+                <div class="row"><span>Status</span><span>[[${contract.status}]]</span></div>
+            </div>
+
+            <div class="custom-section">
+                <h3>Motocicleta</h3>
+                <div class="row"><span>Modelo</span><span>[[${contract.motorcycle.model.name}]]</span></div>
+                <div class="row"><span>Placa</span><span>[[${contract.motorcycle.licensePlate}]]</span></div>
+                <div class="row"><span>Chassi</span><span>[[${contract.motorcycle.chassis}]]</span></div>
+            </div>
+
+            <div class="custom-section">
+                <h3>Locatário</h3>
+                <div class="row"><span>Nome</span><span>[[${contract.tenant.fullName}]]</span></div>
+                <div class="row"><span>CPF</span><span>[[${contract.tenant.cpf}]]</span></div>
+                <div class="row"><span>Endereço</span>
+                    <span>[[${contract.tenant.address.streetName}]], [[${contract.tenant.address.number}]] - [[${contract.tenant.address.complement}]]</span>
+                </div>
+                <div class="row"><span>CEP</span><span>[[${contract.tenant.address.zipCode}]]</span></div>
+            </div>
+        </div>
+
+        <div class="custom-modal-footer">
+            <button class="btn btn-danger"
+                    th:hx-post="@{/contract/{id}/finalize(id=${contract.id})}"
+                    hx-target="#dialog"
+                    hx-swap="innerHTML">Finalizar contrato</button>
+
+            <button class="btn btn-primary"
+                    th:hx-get="@{/contract/{id}/edit(id=${contract.id})}"
+                    hx-target="#dialog"
+                    hx-swap="innerHTML">Editar contrato</button>
+        </div>
+    </div>
+</div>

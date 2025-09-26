@@ -1,0 +1,10 @@
+<div th:fragment="list-header(buttonText, hxGetUrl)" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="d-flex justify-content-end mb-3 w-100">
+        <button class="btn btn-primary"
+                th:text="${buttonText}"
+                th:hx-get="${hxGetUrl}"
+                hx-target="#dialog"
+                hx-swap="innerHTML">
+        </button>
+    </div>
+</div>

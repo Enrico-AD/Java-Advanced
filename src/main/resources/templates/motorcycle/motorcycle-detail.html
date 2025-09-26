@@ -1,0 +1,36 @@
+<div th:fragment="motorcycle-detail" class="custom-modal-overlay" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="custom-modal">
+
+        <div class="custom-modal-header">
+            <h2>[[${motorcycle.model}]]</h2>
+            <button class="custom-close-btn" onclick="document.getElementById('dialog').innerHTML=''">✕</button>
+        </div>
+
+        <div class="custom-modal-body">
+
+            <div class="custom-section">
+                <h3>Informações</h3>
+                <div class="row"><span>ID</span><span>[[${motorcycle.id}]]</span></div>
+                <div class="row"><span>Modelo</span><span>[[${motorcycle.model}]]</span></div>
+                <div class="row"><span>Placa</span><span>[[${motorcycle.licensePlate}]]</span></div>
+                <div class="row"><span>Pátio</span><span>[[${motorcycle.yard.name}]]</span></div>
+                <div class="row"><span>Status</span><span>[[${motorcycle.status}]]</span></div>
+            </div>
+        </div>
+
+        <div class="custom-modal-footer">
+            <button class="btn btn-danger"
+                    th:hx-delete="@{/motorcycle/{id}(id=${motorcycle.id})}"
+                    hx-target="#dialog"
+                    hx-swap="innerHTML">Excluir moto</button>
+
+            <button class="btn btn-primary"
+                    th:hx-get="@{/motorcycle/{id}/edit(id=${motorcycle.id})}"
+                    hx-target="#dialog"
+                    hx-swap="innerHTML">
+                Editar moto
+            </button>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+<div th:fragment="tabs" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="tabs">
+        <button
+                hx-get="/stocks/list?type=inventory"
+                hx-target="#stocks-list"
+                hx-swap="innerHTML">
+            Inventory
+        </button>
+
+        <button
+                hx-get="/stocks/list?type=order"
+                hx-target="#stocks-list"
+                hx-swap="innerHTML">
+            Order Stock
+        </button>
+    </div>
+</div>

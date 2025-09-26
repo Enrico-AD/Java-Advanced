@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script src="/js/scripts.js"></script>
+
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+</head>
+<body>
+<div class="stocks-container">
+
+    <div class="tabs">
+        <button class="tab-button"
+                hx-get="/list/motorcycle"
+                hx-target="#stocks-list"
+                hx-swap="innerHTML">
+            Motos
+        </button>
+
+        <button class="tab-button"
+                hx-get="/list/contracts"
+                hx-target="#stocks-list"
+                hx-swap="innerHTML">
+            Contratos
+        </button>
+    </div>
+    <div id="stocks-list"
+         hx-get="/motorcycle/list"
+         hx-trigger="load"
+         hx-swap="innerHTML">
+        Carregando...
+    </div>
+</div>
+
+<div id="dialog"></div>
+
+<script src="https://unpkg.com/htmx.org@1.9.2"></script>
+</body>
+</html>

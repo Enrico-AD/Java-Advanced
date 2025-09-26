@@ -1,0 +1,66 @@
+<div id="dialog" th:fragment="motorcycle-form" class="custom-modal-overlay" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="custom-modal">
+
+        <div class="custom-modal-header">
+            <h2 th:text="${motorcycle.id != null ? 'Editar Moto ' + motorcycle.licensePlate : 'Nova Moto'}"></h2>
+            <button class="custom-close-btn" onclick="document.getElementById('dialog').innerHTML=''">✕</button>
+        </div>
+
+        <div class="custom-modal-body">
+            <div class="custom-section">
+
+                <form th:object="${motorcycle}"
+                      th:action="${motorcycle.id} != null ? @{/motorcycle/{id}/update(id=${motorcycle.id})} : @{/motorcycle/new}"
+                      method="post"
+                      onsubmit="submitMotorcycleForm(event, this)">
+
+                    <input type="hidden" th:field="*{id}" />
+
+                    <div class="form-group">
+                        <label>Modelo</label>
+                        <input type="text" th:field="*{model}" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Placa</label>
+                        <input type="text" th:field="*{licensePlate}" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Chassi</label>
+                        <input type="text" th:field="*{chassis}" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pátio</label>
+                        <select th:field="*{yard.id}" required>
+                            <option value="">-- Selecione um pátio --</option>
+                            <option th:each="yard : ${yards}"
+                                    th:value="${yard.id}"
+                                    th:text="${yard.name}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select th:field="*{status}">
+                            <option th:each="s : ${statuses}"
+                                    th:value="${s}"
+                                    th:text="${s}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="custom-modal-footer">
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <button type="button" class="btn btn-secondary"
+                                onclick="document.getElementById('dialog').innerHTML = ''">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
