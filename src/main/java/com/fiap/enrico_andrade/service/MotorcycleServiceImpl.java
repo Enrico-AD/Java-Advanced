@@ -64,11 +64,15 @@ public class MotorcycleServiceImpl implements MotorcycleService {
     @Override
     public MotorcycleDTO save(MotorcycleDTO dto) {
         Motorcycle entity = new Motorcycle();
+
         entity.setId(dto.getId());
+        entity.setChassis(dto.getChassis());
+        entity.setEngineNumber(dto.getEngineNumber());
         entity.setLicensePlate(dto.getLicensePlate());
 
-        Model model = new Model();
-        model.setName(dto.getModel());
+        Model model = modelRepository.findByName(dto.getModel())
+                .orElseThrow(() -> new RuntimeException("Modelo não encontrado: " + dto.getModel()));
+
         entity.setModel(model);
 
         if (dto.getYard() != null) {
@@ -108,7 +112,6 @@ public class MotorcycleServiceImpl implements MotorcycleService {
                 .orElseThrow(() -> new RuntimeException("Pátio não encontrado"));
         entity.setYard(yard);
 
-        // criar novo status quando troca
         Status status = new Status();
         status.setDescription(dto.getStatus());
         status.setTimestamp(LocalDateTime.now());
@@ -151,6 +154,7 @@ public class MotorcycleServiceImpl implements MotorcycleService {
                 motorcycle.getModel() != null ? motorcycle.getModel().getName() : null,
                 motorcycle.getLicensePlate(),
                 motorcycle.getChassis(),
+                motorcycle.getEngineNumber(),
                 yardDTO,
                 status != null ? status.getDescription() : "Liberada"
         );

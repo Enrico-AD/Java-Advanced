@@ -1,10 +1,10 @@
 package com.fiap.enrico_andrade.controller;
 
 import com.fiap.enrico_andrade.dto.MotorcycleDTO;
+import com.fiap.enrico_andrade.service.ModelService;
 import com.fiap.enrico_andrade.service.MotorcycleService;
 import com.fiap.enrico_andrade.service.StatusService;
 import com.fiap.enrico_andrade.service.YardService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,21 +21,35 @@ public class MotorcycleController {
     private final MotorcycleService motorcycleService;
     private final YardService yardService;
     private final StatusService statusService;
+    private final ModelService modelService;
 
     public MotorcycleController(
             MotorcycleService motorcycleService,
             YardService yardService,
-            StatusService statusService
+            StatusService statusService,
+            ModelService modelService
     ) {
         this.motorcycleService = motorcycleService;
         this.yardService = yardService;
         this.statusService = statusService;
+        this.modelService = modelService;
     }
 
     @GetMapping("/list")
     public String listMotorcycles(Model model) {
         model.addAttribute("motorcycles", motorcycleService.findAll());
         return "motorcycle/motorcycle-list :: motorcycle-list";
+    }
+
+    @GetMapping("/new")
+    public String newContractForm(Model model) {
+        MotorcycleDTO dto = new MotorcycleDTO();
+        model.addAttribute("motorcycle", dto);
+        model.addAttribute("yards", yardService.findAll());
+        model.addAttribute("statuses", statusService.findAllDescriptions());
+        model.addAttribute("models", modelService.findAll());
+
+        return "motorcycle/motorcycle-form :: motorcycle-form";
     }
 
     @PostMapping("/new")

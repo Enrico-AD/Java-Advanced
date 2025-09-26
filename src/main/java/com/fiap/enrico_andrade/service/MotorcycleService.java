@@ -1,7 +1,6 @@
 package com.fiap.enrico_andrade.service;
 
 import com.fiap.enrico_andrade.dto.MotorcycleDTO;
-import com.fiap.enrico_andrade.entity.Motorcycle;
 
 import java.util.List;
 

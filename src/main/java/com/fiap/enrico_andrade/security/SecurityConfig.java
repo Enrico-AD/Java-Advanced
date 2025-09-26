@@ -42,8 +42,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/register", "/login", "/motorcycle/**").permitAll()
+                        .requestMatchers("/", "/register", "/login").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                        .requestMatchers("/motorcycle/list").permitAll()
+                        .requestMatchers("/motorcycle/new", "/motorcycle/*/update", "/motorcycle/*/edit", "/motorcycle/new","/motorcycle/*/details", "/motorcycle/*/delete").authenticated()
                         .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/login")

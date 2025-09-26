@@ -1,6 +1,8 @@
 <div id="dialog" th:fragment="contract-edit-form" class="custom-modal-overlay" xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="custom-modal">
 
+        <div th:replace="fragments/error :: error-message"></div>
+
         <div class="custom-modal-header">
             <h2>Contrato [[${contract.contractNumber}]]</h2>
             <button class="custom-close-btn" onclick="document.getElementById('dialog').innerHTML=''">✕</button>

@@ -1,25 +1,23 @@
 <div id="dialog" th:fragment="motorcycle-form" class="custom-modal-overlay" xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="custom-modal">
 
+        <div th:replace="fragments/error :: error-message"></div>
+
         <div class="custom-modal-header">
             <h2 th:text="${motorcycle.id != null ? 'Editar Moto ' + motorcycle.licensePlate : 'Nova Moto'}"></h2>
             <button class="custom-close-btn" onclick="document.getElementById('dialog').innerHTML=''">✕</button>
         </div>
 
+
         <div class="custom-modal-body">
             <div class="custom-section">
 
                 <form th:object="${motorcycle}"
-                      th:action="${motorcycle.id} != null ? @{/motorcycle/{id}/update(id=${motorcycle.id})} : @{/motorcycle/new}"
+                      th:action="@{${motorcycle.id} != null ? '/motorcycle/' + ${motorcycle.id} + '/update' : '/motorcycle/new'}"
                       method="post"
                       onsubmit="submitMotorcycleForm(event, this)">
 
                     <input type="hidden" th:field="*{id}" />
-
-                    <div class="form-group">
-                        <label>Modelo</label>
-                        <input type="text" th:field="*{model}" required/>
-                    </div>
 
                     <div class="form-group">
                         <label>Placa</label>
@@ -29,6 +27,22 @@
                     <div class="form-group">
                         <label>Chassi</label>
                         <input type="text" th:field="*{chassis}" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Número do motor</label>
+                        <input type="text" th:field="*{engineNumber}" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Modelo</label>
+                        <select th:field="*{model}" required>
+                            <option value="">-- Selecione um modelo --</option>
+                            <option th:each="m : ${models}"
+                                    th:value="${m.name}"
+                                    th:text="${m.name}">
+                            </option>
+                        </select>
                     </div>
 
                     <div class="form-group">

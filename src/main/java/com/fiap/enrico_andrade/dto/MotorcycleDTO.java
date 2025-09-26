@@ -8,6 +8,7 @@ public class MotorcycleDTO {
     private String model;
     private String licensePlate;
     private String chassis;
+    private String engineNumber;
     private YardDTO yard;
     private String status;
 
@@ -18,7 +19,7 @@ public class MotorcycleDTO {
             Integer id,
             String model,
             String licensePlate,
-            String chassis,
+            String chassis, String engineNumber,
             YardDTO yard,
             String status
     ) {
@@ -26,6 +27,7 @@ public class MotorcycleDTO {
         this.model = model;
         this.licensePlate = licensePlate;
         this.chassis = chassis;
+        this.engineNumber = engineNumber;
         this.yard = yard;
         this.status = status;
     }
@@ -82,5 +84,13 @@ public class MotorcycleDTO {
 
     public void setChassis(String chassis) {
         this.chassis = chassis;
+    }
+
+    public String getEngineNumber() {
+        return engineNumber;
+    }
+
+    public void setEngineNumber(String engineNumber) {
+        this.engineNumber = engineNumber;
     }
 }
