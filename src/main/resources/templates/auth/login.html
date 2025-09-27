@@ -1,11 +1,21 @@
-<div th:fragment="login-form" xmlns:th="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div th:fragment="login-form">
     <div class="modal-header">
         <h5 class="modal-title">Login</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
 
     <div class="modal-body">
-        <form th:action="@{/login}" method="post">
+
+        <div id="loginError" class="alert alert-danger" style="display:none"></div>
+
+        <form id="loginForm" th:action="@{/login}" method="post">
             <div class="mb-3">
                 <input type="text" class="form-control" name="username" placeholder="Usuário" required>
             </div>
@@ -14,14 +24,14 @@
             </div>
             <button type="submit" class="btn btn-primary w-100">Entrar</button>
         </form>
+
     </div>
 
     <div class="modal-footer">
         <small>Não tem conta?
-            <a href="#"
-               hx-get="/register"
-               hx-target="#modalContent"
-               hx-swap="innerHTML">Cadastre-se</a>
+            <a href="#" hx-get="/register" hx-target="#modalContent" hx-swap="innerHTML">Cadastre-se</a>
         </small>
     </div>
 </div>
+</body>
+</html>

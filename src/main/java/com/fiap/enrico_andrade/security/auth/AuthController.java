@@ -1,15 +1,13 @@
 package com.fiap.enrico_andrade.security.auth;
 
 import com.fiap.enrico_andrade.security.entity.AppUser;
-import com.fiap.enrico_andrade.security.entity.Role;
-import com.fiap.enrico_andrade.security.repository.UserRepository;
 import com.fiap.enrico_andrade.security.service.UserService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class AuthController {
@@ -21,7 +19,10 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String loginForm() {
+    public String loginForm(@RequestParam(required = false) String error, Model model) {
+        if (error != null) {
+            model.addAttribute("error", "Usuário ou senha inválidos.");
+        }
         return "auth/login :: login-form";
     }
 
@@ -33,10 +34,14 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(@ModelAttribute("user") AppUser user, Model model) {
-        userService.register(user);
-
-        model.addAttribute("success", "Usuário cadastrado com sucesso!");
-        return "auth/login :: login-form";
+        try {
+            userService.register(user);
+            model.addAttribute("success", "Usuário cadastrado com sucesso!");
+            return "auth/login :: login-form";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("user", user);
+            return "auth/signup :: register-form";
+        }
     }
 }
-

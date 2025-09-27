@@ -4,12 +4,16 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
 
+    <div th:if="${error}" class="alert alert-danger alert-sm py-2 mb-3" th:text="${error}"></div>
+    <div th:if="${success}" class="alert alert-success alert-sm py-2 mb-3" th:text="${success}"></div>
+
     <div class="modal-body">
-        <form th:action="@{/register}" th:object="${user}" method="post"
+        <form th:action="@{/register}"
+              th:object="${user}"
+              method="post"
               hx-post="/register"
               hx-target="#modalContent"
               hx-swap="innerHTML">
-
             <div class="mb-3">
                 <input type="text" th:field="*{username}" class="form-control" placeholder="Usuário" required>
             </div>

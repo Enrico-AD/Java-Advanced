@@ -44,17 +44,16 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/register", "/login").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/users/list", "/users/*/delete", "/users/*/promote" ).authenticated()
+                        .requestMatchers("/users/list", "/users/*/delete", "/users/*/promote").authenticated()
                         .requestMatchers("/motorcycle/list").permitAll()
-                        .requestMatchers("/motorcycle/new", "/motorcycle/*/update", "/motorcycle/*/edit", "/motorcycle/new","/motorcycle/*/details", "/motorcycle/*/delete").authenticated()
+                        .requestMatchers("/motorcycle/new", "/motorcycle/*/update", "/motorcycle/*/edit", "/motorcycle/new", "/motorcycle/*/details", "/motorcycle/*/delete").authenticated()
                         .requestMatchers("/models/list").permitAll()
-                        .requestMatchers("/models/new", "/models/*/update", "/models/*/edit", "/models/new","/models/*/details", "/models/*/delete").authenticated()
+                        .requestMatchers("/models/new", "/models/*/update", "/models/*/edit", "/models/new", "/models/*/details", "/models/*/delete").authenticated()
                         .requestMatchers("/contract/list").permitAll()
-                        .requestMatchers("/contract/new", "/contract/*/update", "/contract/*/edit", "/contract/new","/contract/*/details", "/contract/*/delete").authenticated()
+                        .requestMatchers("/contract/new", "/contract/*/update", "/contract/*/edit", "/contract/new", "/contract/*/details", "/contract/*/delete").authenticated()
                         .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/login")
-                        .permitAll()
                         .defaultSuccessUrl("/", true)
                 )
                 .logout(logout -> logout
