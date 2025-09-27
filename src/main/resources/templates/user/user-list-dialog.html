@@ -16,13 +16,13 @@
                     <div class="btn-group">
                         <button class="btn btn-outline-danger btn-sm"
                                 th:hx-post="@{/users/{id}/delete(id=${u.id})}"
-                                hx-target="#dialog"
+                                hx-target="#modalContent"
                                 hx-swap="innerHTML">
                             🗑
                         </button>
                         <button class="btn btn-outline-primary btn-sm"
                                 th:hx-post="@{/users/{id}/promote(id=${u.id})}"
-                                hx-target="#dialog"
+                                hx-target="#modalContent"
                                 hx-swap="innerHTML"
                                 th:disabled="${u.role == 'ROLE_ADMIN'}">
                             ⬆️

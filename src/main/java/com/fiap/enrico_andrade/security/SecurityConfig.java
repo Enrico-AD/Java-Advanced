@@ -44,6 +44,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/register", "/login").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                        .requestMatchers("/users/list", "/users/*/delete", "/users/*/promote" ).authenticated()
                         .requestMatchers("/motorcycle/list").permitAll()
                         .requestMatchers("/motorcycle/new", "/motorcycle/*/update", "/motorcycle/*/edit", "/motorcycle/new","/motorcycle/*/details", "/motorcycle/*/delete").authenticated()
                         .requestMatchers("/models/list").permitAll()
@@ -57,7 +58,7 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/", true)
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutSuccessUrl("/")
                         .permitAll()
                 );
 

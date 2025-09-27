@@ -12,8 +12,8 @@
 
         <div sec:authorize="hasRole('ADMIN')">
             <button class="btn btn-light rounded-circle border"
-                    hx-get="@{/users/list}"
-                    hx-target="#dialog"
+                    th:hx-get="@{/users/list}"
+                    hx-target="#modalContent"
                     hx-swap="innerHTML"
                     title="Gerenciar Usuários">
                 <i class="bi bi-gear"></i>

@@ -9,3 +9,10 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
+
+document.body.addEventListener("htmx:afterSwap", (e) => {
+    if (e.detail.target.id === "modalContent") {
+        let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById("mainModal"));
+        modal.show();
+    }
+});
