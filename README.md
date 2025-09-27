@@ -103,7 +103,7 @@ Admin
 
 login: admin
 
-senha: admin123
+senha: 123
 
 Usuário comum
 
