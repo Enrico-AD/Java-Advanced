@@ -3,6 +3,7 @@ package com.fiap.enrico_andrade.security.auth;
 import com.fiap.enrico_andrade.security.entity.AppUser;
 import com.fiap.enrico_andrade.security.entity.Role;
 import com.fiap.enrico_andrade.security.repository.UserRepository;
+import com.fiap.enrico_andrade.security.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,44 +14,29 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class AuthController {
 
+    private final UserService userService;
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    public AuthController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/login")
-    public String login() {
-        return "auth/login";
+    public String loginForm() {
+        return "auth/login :: login-form";
     }
 
     @GetMapping("/register")
     public String registerForm(Model model) {
         model.addAttribute("user", new AppUser());
-        return "auth/register";
+        return "auth/signup :: register-form";
     }
 
     @PostMapping("/register")
     public String register(@ModelAttribute("user") AppUser user, Model model) {
+        userService.register(user);
 
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            model.addAttribute("error", "Nome de usuário indisponível!");
-            return "auth/register";
-        }
-
-        if (user.getPassword().length() < 5) {
-            model.addAttribute("error", "A senha deve ter pelo menos 5 caracteres.");
-            return "auth/register";
-        }
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(Role.ROLE_ADMIN);
-        userRepository.save(user);
-
-        model.addAttribute("success", "Cadastro realizado com sucesso! Faça login.");
-        return "auth/login";
+        model.addAttribute("success", "Usuário cadastrado com sucesso!");
+        return "auth/login :: login-form";
     }
 }
+

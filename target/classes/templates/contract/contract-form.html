@@ -15,14 +15,16 @@
 
             <input type="hidden" th:field="*{tenant.id}" />
 
-            <div class="form-group">
-                <label for="startDate">Data de início</label>
-                <input id="startDate" type="date" class="form-control" th:field="*{startDate}"/>
+            <div class="mb-3">
+                <label class="form-label">Data de início</label>
+                <input type="date" th:field="*{startDate}" class="form-control" required>
+                <div class="invalid-feedback">A data de início deve ser anterior à data de término.</div>
             </div>
 
-            <div class="form-group">
-                <label for="endDate">Data de término</label>
-                <input id="endDate" type="date" class="form-control" th:field="*{endDate}"/>
+            <div class="mb-3">
+                <label class="form-label">Data de término</label>
+                <input type="date" th:field="*{endDate}" class="form-control">
+                <div class="invalid-feedback">A data de término deve ser posterior à data de início.</div>
             </div>
 
             <div class="mb-3">
@@ -57,9 +59,10 @@
                 <input type="text" th:field="*{tenant.fullName}" required/>
             </div>
 
-            <div class="form-group">
-                <label>CPF</label>
-                <input type="text" th:field="*{tenant.cpf}" required/>
+            <div class="mb-3">
+                <label class="form-label">CPF</label>
+                <input type="text" th:field="*{tenant.cpf}" class="form-control" id="cpf" required>
+                <div class="invalid-feedback">Informe um CPF válido.</div>
             </div>
 
             <div class="form-group">
@@ -77,9 +80,11 @@
                 <input type="text" th:field="*{tenant.address.complement}"/>
             </div>
 
-            <div class="form-group">
-                <label>CEP</label>
-                <input type="text" th:field="*{tenant.address.zipCode}" pattern="\d{8}" required/>
+            <div class="mb-3">
+                <label class="form-label">CEP</label>
+                <input type="text" th:field="*{tenant.address.zipCode}" class="form-control"/>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('tenant.address.zipCode')}"
+                     th:errors="*{tenant.address.zipCode}"></div>
             </div>
 
             <div class="modal-footer">

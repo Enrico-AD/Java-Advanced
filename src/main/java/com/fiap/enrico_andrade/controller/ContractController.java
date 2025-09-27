@@ -10,8 +10,10 @@ import com.fiap.enrico_andrade.entity.Status;
 import com.fiap.enrico_andrade.service.ContractService;
 import com.fiap.enrico_andrade.service.MotorcycleService;
 import com.fiap.enrico_andrade.service.StatusService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -100,7 +102,8 @@ public class ContractController {
     }
 
     @PostMapping("/new")
-    public String createContract(@ModelAttribute("contract") ContractUpdateDTO contractDTO,
+    public String createContract(@Valid @ModelAttribute("contract") ContractUpdateDTO contractDTO,
+                                 BindingResult result,
                                  Model model) {
 
         contractService.createContract(contractDTO);

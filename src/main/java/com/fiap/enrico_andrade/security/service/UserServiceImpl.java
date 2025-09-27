@@ -3,6 +3,7 @@ package com.fiap.enrico_andrade.security.service;
 import com.fiap.enrico_andrade.security.entity.AppUser;
 import com.fiap.enrico_andrade.security.entity.Role;
 import com.fiap.enrico_andrade.security.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +12,11 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -28,9 +31,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void promoteToAdmin(Integer id) {
-        userRepository.findById(id).ifPresent(user -> {
-            user.setRole(Role.ROLE_ADMIN);
-            userRepository.save(user);
-        });
+        AppUser user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        user.setRole(Role.ROLE_ADMIN);
+        userRepository.save(user);
+    }
+
+    @Override
+    public AppUser register(AppUser user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new RuntimeException("Usuário já existe");
+        }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.ROLE_USER);
+        return userRepository.save(user);
     }
 }

@@ -1,5 +1,6 @@
 package com.fiap.enrico_andrade.dto;
 
+import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -15,6 +16,8 @@ public class ContractUpdateDTO {
     private LocalDate endDate;
     private StatusDTO status;
     private MotorcycleDTO motorcycle;
+
+    @Valid
     private TenantDTO tenant;
 
     public ContractUpdateDTO() {

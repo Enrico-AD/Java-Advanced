@@ -17,6 +17,13 @@
     </div>
 
     <div class="modal-footer">
-        <small>Não tem conta? <a th:href="@{/register}">Cadastre-se</a></small>
+        <small>Não tem conta?
+            <a href="#"
+               hx-get="/register"
+               hx-target="#modalContent"
+               hx-swap="innerHTML"
+               data-bs-toggle="modal"
+               data-bs-target="#mainModal">Cadastre-se</a>
+        </small>
     </div>
 </div>

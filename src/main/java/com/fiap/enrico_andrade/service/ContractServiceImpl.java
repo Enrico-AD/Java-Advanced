@@ -76,7 +76,7 @@ public class ContractServiceImpl implements ContractService {
                 if (address != null) {
                     addressDTO = new AddressDTO(
                             address.getStreetName(),
-                            address.getNumber(),
+                            Integer.parseInt(address.getNumber()),
                             address.getComplement(),
                             address.getZipCode()
                     );
@@ -246,7 +246,7 @@ public class ContractServiceImpl implements ContractService {
     private Address updateOrCreateAddress(Address current, AddressDTO dto) {
         Address address = current != null ? current : new Address();
         address.setStreetName(dto.getStreetName());
-        address.setNumber(dto.getNumber());
+        address.setNumber(dto.getNumber().toString());
         address.setComplement(dto.getComplement());
         address.setZipCode(dto.getZipCode());
         return addressRepository.save(address);
@@ -290,7 +290,7 @@ public class ContractServiceImpl implements ContractService {
     private Address createAddress(AddressDTO dto) {
         Address address = new Address();
         address.setStreetName(dto.getStreetName());
-        address.setNumber(dto.getNumber());
+        address.setNumber(dto.getNumber().toString());
         address.setComplement(dto.getComplement());
         address.setZipCode(dto.getZipCode());
         return addressRepository.save(address);

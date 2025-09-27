@@ -8,4 +8,5 @@ public interface UserService {
     public List<AppUser> findAll();
     public void deleteById(Integer id);
     public void promoteToAdmin(Integer id);
+    AppUser register(AppUser user);
 }

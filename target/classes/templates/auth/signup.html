@@ -1,0 +1,32 @@
+<div th:fragment="register-form">
+    <div class="modal-header">
+        <h5 class="modal-title">Cadastro</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+
+    <div class="modal-body">
+        <form th:action="@{/register}" th:object="${user}" method="post"
+              hx-post="/register"
+              hx-target="#modalContent"
+              hx-swap="innerHTML">
+
+            <div class="mb-3">
+                <input type="text" th:field="*{username}" class="form-control" placeholder="Usuário" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" th:field="*{password}" class="form-control" placeholder="Senha" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        <small>Já tem conta?
+            <a href="#"
+               hx-get="/login"
+               hx-target="#modalContent"
+               hx-swap="innerHTML">Entrar</a>
+        </small>
+    </div>
+</div>

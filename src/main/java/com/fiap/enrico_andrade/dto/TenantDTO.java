@@ -1,18 +1,25 @@
 package com.fiap.enrico_andrade.dto;
 
 import com.fiap.enrico_andrade.util.CPF;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 
 public class TenantDTO {
 
     private Integer id;
+    @NotBlank(message = "Nome é obrigatório")
+
     private String fullName;
 
-    @CPF
+    @CPF(message = "CPF inválido")
+    @NotBlank(message = "CPF é obrigatório")
     private String cpf;
 
+    @Valid
     private AddressDTO address;
 
-    public TenantDTO() {}
+    public TenantDTO() {
+    }
 
     public TenantDTO(Integer id, String fullName, String cpf, AddressDTO address) {
         this.id = id;
