@@ -1,8 +1,11 @@
 package com.fiap.enrico_andrade.dto;
 
+import java.time.LocalDateTime;
+
 public class StatusDTO {
     private Integer id;
     private String description;
+    private LocalDateTime timestamp;
 
     public StatusDTO() {
     }
@@ -14,6 +17,13 @@ public class StatusDTO {
     public StatusDTO(Integer id, String description) {
         this.id = id;
         this.description = description;
+    }
+
+    public StatusDTO(Integer id, String description, LocalDateTime timestamp) {
+        this.id = id;
+        this.description = description;
+        this.timestamp = timestamp;
+
     }
 
     public Integer getId() {
@@ -30,5 +40,13 @@ public class StatusDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 }

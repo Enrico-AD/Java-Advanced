@@ -108,7 +108,6 @@ public class ContractServiceImpl implements ContractService {
                 );
 
 
-
                 motorcycleDTO = new MotorcycleDTO(
                         motorcycle.getId(),
                         motorcycle.getModel().getName(),
@@ -151,7 +150,7 @@ public class ContractServiceImpl implements ContractService {
         contract.setStartDate(dto.getStartDate());
         contract.setEndDate(dto.getEndDate());
 
-//        contract.setMotorcycle(resolveMotorcycle(dto));
+        contract.setMotorcycle(resolveMotorcycle(dto));
         contract.setTenant(resolveTenant(dto));
 
         Status status = buildStatus(dto, contract);
@@ -172,25 +171,33 @@ public class ContractServiceImpl implements ContractService {
 
         Contract saved = contractRepository.save(contract);
 
-        // último status registrado
         Status lastStatus = statusRepository.findLastStatusByContractId(id);
 
-        if (dto.getStatus() != null &&
-                (lastStatus == null || !lastStatus.getId().equals(dto.getStatus().getId()))) {
+        if (dto.getStatus() != null) {
+            String newStatusDesc;
 
-            Status newStatus = new Status();
-            newStatus.setDescription(
-                    statusRepository.findById(dto.getStatus().getId())
-                            .orElseThrow(() -> new RuntimeException("Status inválido"))
-                            .getDescription()
-            );
-            newStatus.setTimestamp(LocalDateTime.now());
-            newStatus.setContract(saved);
-            newStatus.setMotorcycle(saved.getMotorcycle());
-            statusRepository.save(newStatus);
+            if (dto.getStatus().getId() != null) {
+                Status dbStatus = statusRepository.findById(dto.getStatus().getId())
+                        .orElseThrow(() -> new RuntimeException("Status inválido"));
+                newStatusDesc = dbStatus.getDescription();
+            } else {
+                newStatusDesc = dto.getStatus().getDescription();
+            }
+
+            if (lastStatus == null || !lastStatus.getDescription().equals(newStatusDesc)) {
+                Status newStatus = new Status();
+                newStatus.setDescription(newStatusDesc);
+                newStatus.setTimestamp(LocalDateTime.now());
+                newStatus.setContract(saved);
+                newStatus.setMotorcycle(saved.getMotorcycle());
+                statusRepository.save(newStatus);
+
+                lastStatus = newStatus;
+            }
         }
 
-        return new ContractDTO(saved, dto.getStatus().getDescription());
+        return new ContractDTO(saved,
+                lastStatus != null ? lastStatus.getDescription() : "Sem status");
     }
 
     @Override
@@ -215,14 +222,23 @@ public class ContractServiceImpl implements ContractService {
     }
 
     private Tenant updateTenant(ContractUpdateDTO dto) {
-        Tenant tenant = tenantRepository.findById(dto.getTenant().getId())
-                .orElseThrow(() -> new RuntimeException("Locatário não encontrado"));
+        if (dto.getTenant() == null) {
+            throw new RuntimeException("Locatário não informado");
+        }
 
-        tenant.setFullName(dto.getTenant().getFullName());
-        tenant.setCpf(dto.getTenant().getCpf());
+        TenantDTO tenantDTO = dto.getTenant();
 
-        Address updatedAddress = updateOrCreateAddress(tenant.getAddress(), dto.getTenant().getAddress());
-        tenant.setAddress(updatedAddress);
+        Tenant tenant = Optional.ofNullable(tenantDTO.getId())
+                .flatMap(tenantRepository::findById)
+                .orElse(new Tenant());
+
+        tenant.setFullName(tenantDTO.getFullName());
+        tenant.setCpf(tenantDTO.getCpf());
+
+        if (tenantDTO.getAddress() != null) {
+            Address updatedAddress = updateOrCreateAddress(tenant.getAddress(), tenantDTO.getAddress());
+            tenant.setAddress(updatedAddress);
+        }
 
         return tenantRepository.save(tenant);
     }
@@ -234,15 +250,6 @@ public class ContractServiceImpl implements ContractService {
         address.setComplement(dto.getComplement());
         address.setZipCode(dto.getZipCode());
         return addressRepository.save(address);
-    }
-
-    private Status buildStatus(ContractUpdateDTO dto, Contract contract, Motorcycle motorcycle) {
-        Status status = new Status();
-        status.setDescription(dto.getStatus().getDescription());
-        status.setTimestamp(LocalDateTime.now());
-        status.setContract(contract);
-        status.setMotorcycle(motorcycle);
-        return status;
     }
 
     private Motorcycle resolveMotorcycle(ContractUpdateDTO dto) {
@@ -293,7 +300,28 @@ public class ContractServiceImpl implements ContractService {
         Status status = new Status();
         status.setTimestamp(LocalDateTime.now());
         status.setMotorcycle(contract.getMotorcycle());
-        status.setDescription(dto.getStatus() != null ? dto.getStatus().getDescription() : "Ativo");
+
+        if (dto.getStatus() != null && dto.getStatus().getDescription() != null) {
+            status.setDescription(dto.getStatus().getDescription());
+        } else {
+            status.setDescription("Ativo");
+        }
+
+        status.setContract(contract);
+        return status;
+    }
+
+    private Status buildStatus(ContractUpdateDTO dto, Contract contract, Motorcycle motorcycle) {
+        Status status = new Status();
+        status.setTimestamp(LocalDateTime.now());
+        status.setMotorcycle(motorcycle);
+
+        if (dto.getStatus() != null && dto.getStatus().getDescription() != null) {
+            status.setDescription(dto.getStatus().getDescription());
+        } else {
+            status.setDescription("Ativo");
+        }
+
         status.setContract(contract);
         return status;
     }

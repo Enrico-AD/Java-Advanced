@@ -1,11 +1,13 @@
 package com.fiap.enrico_andrade.service;
 
 
+import com.fiap.enrico_andrade.dto.StatusDTO;
 import com.fiap.enrico_andrade.entity.Status;
 import com.fiap.enrico_andrade.repository.StatusRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StatusServiceImpl implements StatusService {
@@ -49,7 +51,27 @@ public class StatusServiceImpl implements StatusService {
     }
 
     @Override
-    public Status findLastStatusByContractId(Integer contractId) {
-        return statusRepository.findLastStatusByContractId(contractId);
+    public Optional<StatusDTO> findLastStatusByContractId(Integer contractId) {
+        return Optional.ofNullable(statusRepository.findLastStatusByContractId(contractId))
+                .map(status -> new StatusDTO(
+                        status.getId(),
+                        status.getDescription(),
+                        status.getTimestamp()
+                ));
+    }
+
+    @Override
+    public List<StatusDTO> getAvailableStatuses() {
+        return List.of(
+                new StatusDTO(null, "Liberada"),
+                new StatusDTO(null, "Aguardando liberação"),
+                new StatusDTO(null, "Em manutenção"),
+                new StatusDTO(null, "Irreparável")
+        );
+    }
+
+    @Override
+    public List<String> getAvailableDescriptions() {
+        return List.of("Liberada", "Aguardando liberação", "Em manutenção", "Irreparável");
     }
 }

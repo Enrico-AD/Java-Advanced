@@ -1,20 +1,14 @@
-INSERT INTO modelo (
-    id_modelo,
-    nome_modelo
-) VALUES ( 1,
-           'Sport' );
-
-INSERT INTO modelo (
-    id_modelo,
-    nome_modelo
-) VALUES ( 2,
-           'E' );
-
-INSERT INTO modelo (
-    id_modelo,
-    nome_modelo
-) VALUES ( 3,
-           'Pop' );
+INSERT INTO modelo (id_modelo, nome_modelo) VALUES
+(1, 'Honda CG 160 Fan'),
+(2, 'Yamaha Fazer 250'),
+(3, 'Honda Biz 125'),
+(4, 'Yamaha XTZ 250 Lander'),
+(5, 'Honda CB 500F'),
+(6, 'Yamaha MT-07'),
+(7, 'Kawasaki Ninja 400'),
+(8, 'Suzuki GSX-S750'),
+(9, 'BMW G 310 R'),
+(10,'Royal Enfield Meteor 350');
 
 INSERT INTO endereco (
     id_endereco,
@@ -70,17 +64,11 @@ INSERT INTO locatario (
     cpf,
     endereco_id_endereco
 ) VALUES
-(1,  'Carlos Alberto Souza',     '11122233344', 11),
-(2,  'Maria Eduarda Ferreira',   '22233344455', 12),
-(3,  'José Ricardo Lima',        '33344455566', 13),
-(4,  'Ana Carolina Martins',     '44455566677', 14),
-(5,  'Lucas Gabriel Pereira',    '55566677788', 15),
-(6,  'Juliana Santos Costa',     '66677788899', 16),
-(7,  'Fernando Oliveira Dias',   '77788899900', 17),
-(8,  'Beatriz Almeida Rocha',    '88899900011', 18),
-(9,  'Rafael Mendes Barros',     '99900011122', 19),
-(10, 'Larissa Gonçalves Neves',  '00011122233', 20),
-(11, 'Rogério Alvez',            '00011134356', 21);
+(1, 'Carlos Alberto Souza',    '11122233344', 6),
+(2, 'Maria Eduarda Ferreira',  '22233344455', 7),
+(3, 'José Ricardo Lima',       '33344455566', 8),
+(4, 'Ana Carolina Martins',    '44455566677', 9),
+(5, 'Lucas Gabriel Pereira',   '55566677788', 10);
 
 INSERT INTO moto (
     id_moto,
@@ -94,12 +82,7 @@ INSERT INTO moto (
 (2,  'POP1B12', '9C6KPOP1B12FGHIJ', 'MTR002', 3, 2),
 (3,  'ELT2C23', '9C6KELT2C23KLMNO', 'MTR003', 2, 1),
 (4,  'RST3D34', '9C6KRST3D34PQRST', 'MTR004', 1, 3),
-(5,  'POP4E45', '9C6KPOP4E45UVWXY', 'MTR005', 3, 4),
-(6,  'ELT5F56', '9C6KELT5F56ZABCD', 'MTR006', 2, 5),
-(7,  'RST6G67', '9C6KRST6G67EFGHI', 'MTR007', 1, 2),
-(8,  'POP7H78', '9C6KPOP7H78JKLMN', 'MTR008', 3, 3),
-(9,  'ELT8I89', '9C6KELT8I89OPQRS', 'MTR009', 2, 4),
-(10, 'RST9J90', '9C6KRST9J90TUVWX', 'MTR010', 1, 5);
+(5,  'POP4E45', '9C6KPOP4E45UVWXY', 'MTR005', 3, 4);
 
  INSERT INTO rfid (
      id_rfid,
@@ -110,12 +93,7 @@ INSERT INTO moto (
  (2,  'A1B2C3D4E5F0002', 2),
  (3,  'A1B2C3D4E5F0003', 3),
  (4,  'A1B2C3D4E5F0004', 4),
- (5,  'A1B2C3D4E5F0005', 5),
- (6,  'A1B2C3D4E5F0006', 6),
- (7,  'A1B2C3D4E5F0007', 7),
- (8,  'A1B2C3D4E5F0008', 8),
- (9,  'A1B2C3D4E5F0009', 9),
- (10, 'A1B2C3D4E5F0010', 10);
+ (5,  'A1B2C3D4E5F0005', 5);
 
 INSERT INTO contrato (
     id_contrato,
@@ -127,16 +105,11 @@ INSERT INTO contrato (
     status
 ) VALUES
 (1,  'CTR-2025-001', '2025-01-10', '2026-01-09', 1, 1, 'VIGENTE'),
-(2,  'CTR-2025-002', '2025-02-15', NULL,         2, 2, 'VIGENTE'),
+(2,  'CTR-2025-002', '2025-02-15', '2026-02-14', 2, 2, 'VIGENTE'),
 (3,  'CTR-2025-003', '2025-03-20', '2026-03-19', 3, 3, 'VIGENTE'),
-(4,  'CTR-2025-004', '2025-04-25', NULL,         4, 4, 'VIGENTE'),
-(5,  'CTR-2025-005', '2025-05-30', '2026-05-29', 5, 5, 'VIGENTE'),
-(6,  'CTR-2025-006', '2025-06-01', NULL,         6, 6, 'VIGENTE'),
-(7,  'CTR-2025-007', '2025-07-05', '2026-07-04', 7, 7, 'VIGENTE'),
-(8,  'CTR-2025-008', '2025-08-10', NULL,         8, 8, 'VIGENTE'),
-(9,  'CTR-2025-009', '2025-09-15', '2026-09-14', 9, 9, 'VIGENTE'),
-(10, 'CTR-2025-010', '2025-09-20', NULL,         10, 10, 'VIGENTE'),
-(11, 'CTR-2025-011', '2025-09-20', NULL,         10, 11, 'VIGENTE');
+(4,  'CTR-2025-004', '2025-04-25', '2026-04-24', 4, 4, 'VIGENTE'),
+(5,  'CTR-2025-005', '2025-05-30', '2026-05-29', 5, 5, 'VIGENTE');
+
 
 INSERT INTO status (
     id_status,
@@ -145,15 +118,8 @@ INSERT INTO status (
     moto_id_moto,
     contrato_id_contrato
 ) VALUES
-(1,  '2025-09-10 08:00:00', 'Aguardando liberação', 1,  1),
-(2,  '2025-09-11 14:30:00', 'Liberada',              1,  11),
-(3,  '2025-09-12 09:00:00', 'Liberada',              NULL, 1),
-(4,  '2025-09-13 10:00:00', 'Aguardando liberação',  2,  3),
-(5,  '2025-09-14 11:00:00', 'Em manutenção',         2,  4),
-(6,  '2025-09-15 17:45:00', 'Liberada',              2,  5),
-(7,  '2025-09-16 12:00:00', 'Liberada',              NULL, 2),
-(8,  '2025-09-17 13:00:00', 'Aguardando liberação',  3,  6),
-(9,  '2025-09-18 14:00:00', 'Liberada',              3,  7),
-(10, '2025-09-19 15:00:00', 'Em manutenção',         4,  8),
-(11, '2025-09-20 16:00:00', 'Irreparável',           4,  9),
-(12, '2025-09-21 09:30:00', 'Liberada',              5,  10);
+(1, '2025-01-10 09:00:00', 'Liberada', 1, 1),
+(2, '2025-02-15 09:00:00', 'Liberada', 2, 2),
+(3, '2025-03-20 09:00:00', 'Liberada', 3, 3),
+(4, '2025-04-25 09:00:00', 'Liberada', 4, 4),
+(5, '2025-05-30 09:00:00', 'Liberada', 5, 5);
