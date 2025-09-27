@@ -1,7 +1,5 @@
 package com.fiap.enrico_andrade.dto;
 
-import com.fiap.enrico_andrade.entity.Motorcycle;
-
 public class MotorcycleDTO {
 
     private Integer id;

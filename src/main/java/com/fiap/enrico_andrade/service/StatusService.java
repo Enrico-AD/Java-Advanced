@@ -11,11 +11,11 @@ public interface StatusService {
 
     List<String> findAllDescriptions();
 
-    Status findById(Long id);
+    Status findById(Integer id);
 
     Status save(Status status);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 
     Status findLastStatusByContractId(Integer contractId);
 }

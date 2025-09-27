@@ -4,12 +4,15 @@ import com.fiap.enrico_andrade.dto.AddressDTO;
 import com.fiap.enrico_andrade.dto.ContractDTO;
 import com.fiap.enrico_andrade.dto.ContractUpdateDTO;
 import com.fiap.enrico_andrade.dto.MotorcycleDTO;
+import com.fiap.enrico_andrade.dto.StatusDTO;
 import com.fiap.enrico_andrade.dto.TenantDTO;
+import com.fiap.enrico_andrade.dto.YardDTO;
 import com.fiap.enrico_andrade.entity.Address;
 import com.fiap.enrico_andrade.entity.Contract;
 import com.fiap.enrico_andrade.entity.Motorcycle;
 import com.fiap.enrico_andrade.entity.Status;
 import com.fiap.enrico_andrade.entity.Tenant;
+import com.fiap.enrico_andrade.entity.Yard;
 import com.fiap.enrico_andrade.repository.AddressRepository;
 import com.fiap.enrico_andrade.repository.ContractRepository;
 import com.fiap.enrico_andrade.repository.MotorcycleRepository;
@@ -60,51 +63,75 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public Optional<ContractUpdateDTO> findById(Integer id) {
-        return contractRepository.findById(id)
-                .map(contract -> {
-                    Status lastStatus = statusRepository.findLastStatusByContractId(contract.getId());
-                    String statusDesc = lastStatus != null ? lastStatus.getDescription() : "Sem status";
+        return contractRepository.findById(id).map(contract -> {
 
-                    AddressDTO addressDTO = null;
-                    if (contract.getTenant() != null && contract.getTenant().getAddress() != null) {
-                        addressDTO = new AddressDTO(
-                                contract.getTenant().getAddress().getStreetName(),
-                                contract.getTenant().getAddress().getNumber(),
-                                contract.getTenant().getAddress().getComplement(),
-                                contract.getTenant().getAddress().getZipCode()
-                        );
-                    }
+            Status lastStatus = statusRepository.findLastStatusByContractId(contract.getId());
 
-                    TenantDTO tenantDTO = null;
-                    if (contract.getTenant() != null) {
-                        tenantDTO = new TenantDTO(
-                                contract.getTenant().getId(),
-                                contract.getTenant().getFullName(),
-                                contract.getTenant().getCpf(),
-                                addressDTO
-                        );
-                    }
+            Tenant tenant = contract.getTenant();
+            AddressDTO addressDTO = null;
+            TenantDTO tenantDTO = null;
 
-                    MotorcycleDTO motorcycleDTO = null;
-                    if (contract.getMotorcycle() != null) {
-                        motorcycleDTO = new MotorcycleDTO(
-                                contract.getMotorcycle().getId(),
-                                contract.getMotorcycle().getModel().getName(),
-                                contract.getMotorcycle().getLicensePlate()
-                        );
-                    }
-
-                    return new ContractUpdateDTO(
-                            contract.getId(),
-                            contract.getContractNumber(),
-                            contract.getStartDate(),
-                            contract.getEndDate(),
-                            statusDesc,
-                            motorcycleDTO,
-                            tenantDTO
+            if (tenant != null) {
+                Address address = tenant.getAddress();
+                if (address != null) {
+                    addressDTO = new AddressDTO(
+                            address.getStreetName(),
+                            address.getNumber(),
+                            address.getComplement(),
+                            address.getZipCode()
                     );
-                });
+                }
+
+                tenantDTO = new TenantDTO(
+                        tenant.getId(),
+                        tenant.getFullName(),
+                        tenant.getCpf(),
+                        addressDTO
+                );
+            }
+
+            StatusDTO statusDTO = new StatusDTO(
+                    lastStatus.getId(),
+                    lastStatus.getDescription()
+            );
+
+            MotorcycleDTO motorcycleDTO = null;
+            if (contract.getMotorcycle() != null) {
+                Motorcycle motorcycle = motorcycleRepository.findById(contract.getMotorcycle().getId())
+                        .orElseThrow(() -> new RuntimeException("Motocicleta não encontrada"));
+
+                Yard yard = motorcycle.getYard();
+                YardDTO yardDTO = new YardDTO(
+                        yard.getId(),
+                        yard.getName(),
+                        yard.getAddress().getStreetName()
+                );
+
+
+
+                motorcycleDTO = new MotorcycleDTO(
+                        motorcycle.getId(),
+                        motorcycle.getModel().getName(),
+                        motorcycle.getLicensePlate(),
+                        motorcycle.getChassis(),
+                        motorcycle.getEngineNumber(),
+                        yardDTO,
+                        lastStatus.getDescription()
+                );
+            }
+
+            return new ContractUpdateDTO(
+                    contract.getId(),
+                    contract.getContractNumber(),
+                    contract.getStartDate(),
+                    contract.getEndDate(),
+                    statusDTO,
+                    motorcycleDTO,
+                    tenantDTO
+            );
+        });
     }
+
 
     @Override
     public Optional<ContractDTO> findDetailById(Integer id) {
@@ -124,7 +151,7 @@ public class ContractServiceImpl implements ContractService {
         contract.setStartDate(dto.getStartDate());
         contract.setEndDate(dto.getEndDate());
 
-        contract.setMotorcycle(resolveMotorcycle(dto));
+//        contract.setMotorcycle(resolveMotorcycle(dto));
         contract.setTenant(resolveTenant(dto));
 
         Status status = buildStatus(dto, contract);
@@ -145,10 +172,25 @@ public class ContractServiceImpl implements ContractService {
 
         Contract saved = contractRepository.save(contract);
 
-        Status newStatus = buildStatus(dto, saved, contract.getMotorcycle());
-        statusRepository.save(newStatus);
+        // último status registrado
+        Status lastStatus = statusRepository.findLastStatusByContractId(id);
 
-        return new ContractDTO(saved, dto.getStatus());
+        if (dto.getStatus() != null &&
+                (lastStatus == null || !lastStatus.getId().equals(dto.getStatus().getId()))) {
+
+            Status newStatus = new Status();
+            newStatus.setDescription(
+                    statusRepository.findById(dto.getStatus().getId())
+                            .orElseThrow(() -> new RuntimeException("Status inválido"))
+                            .getDescription()
+            );
+            newStatus.setTimestamp(LocalDateTime.now());
+            newStatus.setContract(saved);
+            newStatus.setMotorcycle(saved.getMotorcycle());
+            statusRepository.save(newStatus);
+        }
+
+        return new ContractDTO(saved, dto.getStatus().getDescription());
     }
 
     @Override
@@ -196,7 +238,7 @@ public class ContractServiceImpl implements ContractService {
 
     private Status buildStatus(ContractUpdateDTO dto, Contract contract, Motorcycle motorcycle) {
         Status status = new Status();
-        status.setDescription(dto.getStatus());
+        status.setDescription(dto.getStatus().getDescription());
         status.setTimestamp(LocalDateTime.now());
         status.setContract(contract);
         status.setMotorcycle(motorcycle);
@@ -204,10 +246,10 @@ public class ContractServiceImpl implements ContractService {
     }
 
     private Motorcycle resolveMotorcycle(ContractUpdateDTO dto) {
-        if (dto.getMotorcycleId() == null) {
+        if (dto.getMotorcycle() == null) {
             throw new IllegalArgumentException("É obrigatório selecionar uma motocicleta");
         } else {
-            return motorcycleRepository.findById(dto.getMotorcycleId())
+            return motorcycleRepository.findById(dto.getMotorcycle().getId())
                     .orElseThrow(() -> new RuntimeException("Motocicleta não encontrada"));
         }
     }
@@ -215,7 +257,7 @@ public class ContractServiceImpl implements ContractService {
     private String generateContractNumber() {
         long count = contractRepository.count();
         String year = String.valueOf(LocalDate.now().getYear());
-        String sequence = String.format("%03d", count + 1); // próximo número
+        String sequence = String.format("%03d", count + 1);
         return "CTR-" + year + "-" + sequence;
     }
 
@@ -251,7 +293,7 @@ public class ContractServiceImpl implements ContractService {
         Status status = new Status();
         status.setTimestamp(LocalDateTime.now());
         status.setMotorcycle(contract.getMotorcycle());
-        status.setDescription(dto.getStatus() != null ? dto.getStatus() : "Ativo");
+        status.setDescription(dto.getStatus() != null ? dto.getStatus().getDescription() : "Ativo");
         status.setContract(contract);
         return status;
     }

@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface MotorcycleService {
 
-
     List<MotorcycleDTO> findAll();
 
     MotorcycleDTO findById(Integer id);

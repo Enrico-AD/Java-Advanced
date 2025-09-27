@@ -1,26 +1,31 @@
 package com.fiap.enrico_andrade.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 public class ContractUpdateDTO {
-
     private Integer id;
     private String contractNumber;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
-    private String status;
-    private Integer motorcycleId;
+    private StatusDTO status;
     private MotorcycleDTO motorcycle;
     private TenantDTO tenant;
 
-    public ContractUpdateDTO() {}
+    public ContractUpdateDTO() {
+    }
 
     public ContractUpdateDTO(
             Integer id,
             String contractNumber,
             LocalDate startDate,
             LocalDate endDate,
-            String status,
+            StatusDTO status,
             MotorcycleDTO motorcycle,
             TenantDTO tenant
     ) {
@@ -36,6 +41,7 @@ public class ContractUpdateDTO {
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -43,6 +49,7 @@ public class ContractUpdateDTO {
     public LocalDate getStartDate() {
         return startDate;
     }
+
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
@@ -50,16 +57,11 @@ public class ContractUpdateDTO {
     public LocalDate getEndDate() {
         return endDate;
     }
+
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
-    public String getStatus() {
-        return status;
-    }
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public String getContractNumber() {
         return contractNumber;
@@ -70,9 +72,6 @@ public class ContractUpdateDTO {
     }
 
     public MotorcycleDTO getMotorcycle() {
-        if (motorcycle == null) {
-            motorcycle = new MotorcycleDTO();
-        }
         return motorcycle;
     }
 
@@ -88,11 +87,11 @@ public class ContractUpdateDTO {
         this.tenant = tenant;
     }
 
-    public Integer getMotorcycleId() {
-        return motorcycleId;
+    public StatusDTO getStatus() {
+        return status;
     }
 
-    public void setMotorcycleId(Integer motorcycleId) {
-        this.motorcycleId = motorcycleId;
+    public void setStatus(StatusDTO status) {
+        this.status = status;
     }
 }

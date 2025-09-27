@@ -30,7 +30,7 @@ public class StatusServiceImpl implements StatusService {
     }
 
     @Override
-    public Status findById(Long id) {
+    public Status findById(Integer id) {
         return statusRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Status não encontrado: " + id));
     }
@@ -41,7 +41,7 @@ public class StatusServiceImpl implements StatusService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         if (!statusRepository.existsById(id)) {
             throw new RuntimeException("Status não encontrado: " + id);
         }

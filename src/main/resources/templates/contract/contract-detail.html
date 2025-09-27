@@ -1,9 +1,10 @@
-<div th:fragment="contract-dialog" class="custom-modal-overlay" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:fragment="contract-detail" class="custom-modal-overlay" xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="custom-modal">
 
-        <div class="custom-modal-header">
-            <h2>Contrato [[${contract.contractNumber}]]</h2>
-            <button class="custom-close-btn" onclick="document.getElementById('dialog').innerHTML=''">✕</button>
+
+        <div class="modal-header">
+            <h5 class="modal-title">Contrato [[${contract.contractNumber}]]</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 
         <div class="custom-modal-body">
@@ -34,15 +35,21 @@
         </div>
 
         <div class="custom-modal-footer">
+
             <button class="btn btn-danger"
-                    th:hx-post="@{/contract/{id}/finalize(id=${contract.id})}"
-                    hx-target="#dialog"
-                    hx-swap="innerHTML">Finalizar contrato</button>
+                    th:hx-delete="@{/contract/{id}(id=${contract.id})}"
+                    hx-target="#motorcycles-list"
+                    hx-swap="innerHTML"
+                    data-bs-dismiss="modal">
+                Excluir
+            </button>
 
             <button class="btn btn-primary"
                     th:hx-get="@{/contract/{id}/edit(id=${contract.id})}"
-                    hx-target="#dialog"
-                    hx-swap="innerHTML">Editar contrato</button>
+                    hx-target="#modalContent"
+                    hx-swap="innerHTML">
+                Editar
+            </button>
         </div>
     </div>
 </div>

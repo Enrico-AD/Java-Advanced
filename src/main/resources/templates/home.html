@@ -87,7 +87,7 @@
              id="contracts"
              role="tabpanel"
              aria-labelledby="contracts-tab"
-             hx-get="/contracts/list"
+             hx-get="/contract/list"
              hx-trigger="revealed"
              hx-target="#contracts"
              hx-swap="innerHTML">
@@ -99,7 +99,6 @@
 <div class="modal fade" id="mainModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content" id="modalContent">
-            <!-- O HTMX injeta aqui -->
         </div>
     </div>
 </div>
@@ -107,6 +106,7 @@
 <div th:replace="fragments/footer :: footer-app"></div>
 <script th:src="@{/js/modal.js}"></script>
 <script th:src="@{/js/security.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
 <script src="https://unpkg.com/htmx.org@1.9.2"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

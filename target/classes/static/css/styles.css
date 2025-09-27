@@ -39,6 +39,34 @@ body {
     color: #1f2937;
     font-size: 14px;
 }
+.table-container {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 1200px;
+}
+
+.table thead th {
+    background: #f7f9fc;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px;
+}
+
+.table tbody td {
+    text-align: center;
+    vertical-align: middle;
+    font-size: 14px;
+    padding: 10px;
+}
+
+.table tbody tr:hover {
+    background: #f1f5f9;
+    transition: 0.2s;
+}
 
 .topbar {
     display: flex;

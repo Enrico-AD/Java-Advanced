@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface StatusRepository extends JpaRepository<Status, Long> {
+public interface StatusRepository extends JpaRepository<Status, Integer> {
     @Query("SELECT s FROM Status s WHERE s.contract.id = :contractId ORDER BY s.timestamp DESC LIMIT 1")
     Status findLastStatusByContractId(@Param("contractId") Integer contractId);
 
