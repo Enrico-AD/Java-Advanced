@@ -42,12 +42,25 @@ public class MotorcycleController {
     }
 
     @GetMapping("/new")
-    public String newContractForm(Model model) {
+    public String newMotorcycleForm(Model model) {
         MotorcycleDTO dto = new MotorcycleDTO();
         model.addAttribute("motorcycle", dto);
         model.addAttribute("yards", yardService.findAll());
         model.addAttribute("statuses", statusService.findAllDescriptions());
         model.addAttribute("models", modelService.findAll());
+        model.addAttribute("formAction", "/motorcycle/new");
+
+        return "motorcycle/motorcycle-form :: motorcycle-form";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editMotorcycle(@PathVariable Integer id, Model model) {
+        MotorcycleDTO motorcycle = motorcycleService.findById(id);
+        model.addAttribute("motorcycle", motorcycle);
+        model.addAttribute("yards", yardService.findAll());
+        model.addAttribute("statuses", statusService.findAllDescriptions());
+        model.addAttribute("models", modelService.findAll());
+        model.addAttribute("formAction", "/motorcycle/" + id + "/update");
 
         return "motorcycle/motorcycle-form :: motorcycle-form";
     }
@@ -66,15 +79,6 @@ public class MotorcycleController {
         return "motorcycle/motorcycle-list :: motorcycle-list";
     }
 
-    @GetMapping("/{id}/edit")
-    public String editMotorcycle(@PathVariable Integer id, Model model) {
-        MotorcycleDTO motorcycle = motorcycleService.findById(id);
-        model.addAttribute("motorcycle", motorcycle);
-        model.addAttribute("yards", yardService.findAll());
-        model.addAttribute("statuses", statusService.findAllDescriptions());
-        return "motorcycle/motorcycle-form :: motorcycle-form";
-    }
-
     @GetMapping("/{id}/details")
     public String detailsMotorcycle(@PathVariable Integer id, Model model) {
         MotorcycleDTO dto = motorcycleService.findById(id);
@@ -84,8 +88,13 @@ public class MotorcycleController {
 
     @DeleteMapping("/{id}")
     public String deleteMotorcycle(@PathVariable Integer id, Model model) {
-        motorcycleService.deleteById(id);
-        model.addAttribute("motorcycles", motorcycleService.findAvailable());
+        try {
+            motorcycleService.deleteById(id);
+            model.addAttribute("motorcycles", motorcycleService.findAll());
+        } catch (IllegalStateException e) {
+            model.addAttribute("motorcycles", motorcycleService.findAll());
+            model.addAttribute("errorMessage", e.getMessage());
+        }
         return "motorcycle/motorcycle-list :: motorcycle-list";
     }
 }

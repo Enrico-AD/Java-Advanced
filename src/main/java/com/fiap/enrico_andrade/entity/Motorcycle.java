@@ -1,13 +1,8 @@
 package com.fiap.enrico_andrade.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "moto")
@@ -33,6 +28,9 @@ public class Motorcycle {
     @ManyToOne
     @JoinColumn(name = "patio_id_patio")
     private Yard yard;
+
+    @OneToMany(mappedBy = "motorcycle", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Status> statuses;
 
     public Integer getId() {
         return id;
@@ -80,5 +78,13 @@ public class Motorcycle {
 
     public void setYard(Yard yard) {
         this.yard = yard;
+    }
+
+    public List<Status> getStatuses() {
+        return statuses;
+    }
+
+    public void setStatuses(List<Status> statuses) {
+        this.statuses = statuses;
     }
 }

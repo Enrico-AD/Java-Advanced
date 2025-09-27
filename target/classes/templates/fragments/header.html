@@ -1,34 +1,52 @@
-<div th:fragment="app-header" class="d-flex justify-content-between align-items-center p-3 shadow-sm bg-light"
+<div th:fragment="app-header"
+     class="d-flex justify-content-between align-items-center px-4 py-3 shadow-sm bg-light"
      xmlns:th="http://www.thymeleaf.org"
      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-    <h3 class="fw-bold text-primary mb-0">Minha Aplicação</h3>
+    <div>
+        <h5 class="fw-bold mb-0 text-dark">Mottu - Sistema de Contratos e Motos</h5>
+        <small class="text-muted">Gerenciamento de contratos, motos e locatários</small>
+    </div>
 
     <div class="d-flex align-items-center gap-3">
 
-        <div sec:authorize="isAuthenticated()">
-            <span class="fs-5 fw-semibold text-dark me-2">
-                👤 <span th:text="${#authentication.name}">usuário</span>
-            </span>
-            <small class="text-muted" th:text="${#authentication.principal.authorities[0].authority}"></small>
+        <div sec:authorize="hasRole('ADMIN')">
+            <button class="btn btn-light rounded-circle border"
+                    hx-get="@{/users/list}"
+                    hx-target="#dialog"
+                    hx-swap="innerHTML"
+                    title="Gerenciar Usuários">
+                <i class="bi bi-gear"></i>
+            </button>
+        </div>
+
+        <div sec:authorize="isAuthenticated()" class="d-flex align-items-center">
+            <div>
+                <div class="fw-semibold text-dark" th:text="${#authentication.name}">Usuário</div>
+                <small class="text-muted"
+                       th:text="${#authentication.principal.authorities[0].authority}">
+                    ROLE_USER
+                </small>
+            </div>
         </div>
 
         <div sec:authorize="!isAuthenticated()">
-            <a href="/login" class="btn btn-outline-primary">Login</a>
-        </div>
-
-        <div sec:authorize="hasRole('ADMIN')">
-            <button class="btn btn-outline-secondary"
-                    hx-get="@{/users/list}"
-                    hx-target="#dialog"
-                    hx-swap="innerHTML">
-                ☰
-            </button>
+            <a href="#"
+               hx-get="/login"
+               hx-target="#modalContent"
+               hx-swap="innerHTML"
+               data-bs-toggle="modal"
+               data-bs-target="#mainModal"
+               class="btn btn-outline-primary">
+                Login
+            </a>
         </div>
 
         <div sec:authorize="isAuthenticated()">
             <form th:action="@{/logout}" method="post" class="d-inline">
-                <button type="submit" class="btn btn-danger">Sair</button>
+                <button type="submit" class="btn btn-outline-danger rounded-circle" title="Sair">
+                    <i class="bi bi-box-arrow-right"></i>
+                </button>
             </form>
         </div>
     </div>

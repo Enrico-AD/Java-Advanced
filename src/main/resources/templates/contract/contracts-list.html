@@ -1,0 +1,49 @@
+<div th:fragment="contracts-list" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-secondary">Contratos</h5>
+        <button class="btn btn-primary btn-sm"
+                th:hx-get="@{/contract/new}"
+                hx-target="#modalContent"
+                hx-swap="innerHTML"
+                data-bs-toggle="modal"
+                data-bs-target="#mainModal">
+            <i class="bi bi-plus-circle"></i> Novo Contrato
+        </button>
+    </div>
+
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+        <tr>
+            <th>Contrato</th>
+            <th>Início</th>
+            <th>Fim</th>
+            <th>Moto</th>
+            <th>Locatário</th>
+            <th>Status</th>
+            <th class="text-end">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="c : ${contracts}">
+            <td th:text="${c.contractNumber}">CTR-2025-001</td>
+            <td th:text="${#temporals.format(c.startDate, 'dd/MM/yyyy')}">01/01/2025</td>
+            <td th:text="${#temporals.format(c.endDate, 'dd/MM/yyyy')}">01/01/2026</td>
+            <td th:text="${c.motorcycle.model.name}">Sport</td>
+            <td th:text="${c.tenant.fullName}">Carlos Souza</td>
+            <td>
+                <span class="badge bg-success" th:text="${c.status}">Liberada</span>
+            </td>
+            <td class="text-end">
+                <button class="btn btn-outline-primary btn-sm"
+                        th:hx-get="@{/contract/{id}/details(id=${c.id})}"
+                        hx-target="#modalContent"
+                        hx-swap="innerHTML"
+                        data-bs-toggle="modal"
+                        data-bs-target="#mainModal">
+                    <i class="bi bi-eye"></i> Ver detalhes
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

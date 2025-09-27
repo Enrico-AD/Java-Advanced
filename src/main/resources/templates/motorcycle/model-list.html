@@ -1,0 +1,54 @@
+<div th:fragment="model-list" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <div id="models-list">
+
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+            <span th:text="${errorMessage}"></span>
+        </div>
+
+        <div class="d-flex justify-content-end mb-3">
+            <button sec:authorize="hasRole('ROLE_ADMIN')"
+                    class="btn btn-primary"
+                    th:hx-get="@{/models/new}"
+                    hx-target="#modalContent"
+                    hx-swap="innerHTML"
+                    data-bs-toggle="modal"
+                    data-bs-target="#mainModal">
+                <i class="bi bi-plus-circle"></i> Novo Modelo
+            </button>
+        </div>
+
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+            <tr>
+                <th>Nome do Modelo</th>
+                <th class="text-end">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="model : ${models}">
+                <td th:text="${model.name}">Honda CG 160</td>
+                <td class="text-end">
+                    <button sec:authorize="hasRole('ROLE_ADMIN')"
+                            class="btn btn-outline-primary btn-sm"
+                            th:hx-get="@{/models/{id}/edit(id=${model.id})}"
+                            hx-target="#modalContent"
+                            hx-swap="innerHTML"
+                            data-bs-toggle="modal"
+                            data-bs-target="#mainModal">
+                        <i class="bi bi-pencil"></i> Editar
+                    </button>
+
+                    <button sec:authorize="hasRole('ROLE_ADMIN')"
+                            class="btn btn-outline-danger btn-sm ms-2"
+                            th:hx-post="@{/models/{id}/delete(id=${model.id})}"
+                            hx-target="#models-list"
+                            hx-swap="innerHTML"
+                            hx-confirm="Tem certeza que deseja excluir este modelo?">
+                        <i class="bi bi-trash"></i> Excluir
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/contracts")
 public class ContractController {
 
     private final ContractService contractService;
@@ -38,22 +40,22 @@ public class ContractController {
         this.statusService = statusService;
     }
 
-    @GetMapping("/list/contracts")
+    @GetMapping("/list")
     public String listContracts(Model model) {
         List<ContractDTO> contracts = contractService.listAll();
         model.addAttribute("contracts", contracts);
-        return "fragments/contracts-list :: contracts-list";
+        return "contract/contracts-list :: contracts-list";
     }
 
-    @GetMapping("/contract/{id}/details")
+    @GetMapping("/{id}/details")
     public String getContractDetails(@PathVariable Integer id, Model model) {
         ContractDTO dto = contractService.findDetailById(id)
                 .orElseThrow(() -> new RuntimeException("Contrato não encontrado"));
         model.addAttribute("contract", dto);
-        return "fragments/contract-dialog :: contract-dialog";
+        return "contract/contract-dialog :: contract-dialog";
     }
 
-    @GetMapping("/contract/{id}/edit")
+    @GetMapping("/{id}/edit")
     public String editContract(@PathVariable Integer id, Model model) {
         ContractUpdateDTO dto = contractService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Contrato não encontrado"));
@@ -63,10 +65,10 @@ public class ContractController {
         model.addAttribute("motorcycles", motorcycleService.findAvailable());
         model.addAttribute("statuses", statusService.findAllDescriptions());
 
-        return "fragments/contract-edit-form :: contract-edit-form";
+        return "contract/contract-edit-form :: contract-edit-form";
     }
 
-    @PostMapping("/contract/{id}/update")
+    @PostMapping("/{id}/update")
     @ResponseBody
     public String updateContract(
             @PathVariable Integer id,
@@ -77,7 +79,7 @@ public class ContractController {
         if (result.hasErrors()) {
             model.addAttribute("motorcycles", motorcycleService.findAvailable());
             model.addAttribute("statuses", statusService.findAll());
-            return "fragments/contract-edit-form :: contract-edit-form";
+            return "contract/contract-edit-form :: contract-edit-form";
         }
 
         contractService.updateContract(id, contractDTO);
@@ -87,7 +89,7 @@ public class ContractController {
         return "OK";
     }
 
-    @GetMapping("/contract/new")
+    @GetMapping("/new")
     public String newContractForm(Model model) {
         ContractUpdateDTO dto = new ContractUpdateDTO();
         dto.setTenant(new TenantDTO());
@@ -98,10 +100,10 @@ public class ContractController {
         model.addAttribute("motorcycles", motorcycleService.findAvailable());
         model.addAttribute("statuses", statusService.findAll());
 
-        return "fragments/contract-edit-form :: contract-edit-form";
+        return "contract/contract-edit-form :: contract-edit-form";
     }
 
-    @PostMapping("/contract/new")
+    @PostMapping("/new")
     @ResponseBody
     public ResponseEntity<Void> createContract(
             @Valid @ModelAttribute("contract") ContractUpdateDTO contractDTO,
@@ -115,7 +117,7 @@ public class ContractController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/contract/{id}/finalize")
+    @PostMapping("/{id}/finalize")
     public String finalizeContract(@PathVariable Integer id, Model model) {
         contractService.finalizeContract(id);
 
@@ -123,6 +125,6 @@ public class ContractController {
                 .orElseThrow(() -> new RuntimeException("Contrato não encontrado"));
 
         model.addAttribute("contract", updated);
-        return "fragments/contract-dialog :: contract-dialog";
+        return "contract/contract-dialog :: contract-dialog";
     }
 }

@@ -10,4 +10,5 @@ public interface MotorcycleRepository extends JpaRepository<Motorcycle, Integer>
     @Query("SELECT m FROM Motorcycle m JOIN Status s ON s.motorcycle.id = m.id " +
             "WHERE s.description = 'Liberada'")
     List<Motorcycle> findByStatus(String status);
+    boolean existsByModelId(Integer modelId);
 }

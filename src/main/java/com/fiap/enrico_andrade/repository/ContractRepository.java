@@ -1,6 +1,7 @@
 package com.fiap.enrico_andrade.repository;
 
 import com.fiap.enrico_andrade.entity.Contract;
+import com.fiap.enrico_andrade.entity.Motorcycle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -18,4 +19,6 @@ public interface ContractRepository extends JpaRepository<Contract, Integer> {
                 )
             """)
     List<Object[]> findContractsWithLatestStatus();
+
+    boolean existsByMotorcycleId(Integer motorcycleId);
 }

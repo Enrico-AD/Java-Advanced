@@ -1,34 +1,49 @@
-<div th:fragment="motorcycle-list" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="motorcycle-list" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
     <div id="motorcycles-list">
 
-        <div th:replace="fragments/list-header :: list-header('Nova Moto', @{/motorcycle/new})"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+            <span th:text="${errorMessage}"></span>
+        </div>
 
-        <table class="table table-striped">
-            <thead>
+        <div class="d-flex justify-content-end mb-3">
+            <button sec:authorize="hasRole('ROLE_ADMIN')"
+                    class="btn btn-primary"
+                    th:hx-get="@{/motorcycle/new}"
+                    hx-target="#modalContent"
+                    hx-swap="innerHTML"
+                    data-bs-toggle="modal"
+                    data-bs-target="#mainModal">
+                <i class="bi bi-plus-circle"></i> Nova Moto
+            </button>
+        </div>
+
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
             <tr>
-                <th>ID</th>
-                <th>Placa</th>
-                <th>Chassi</th>
                 <th>Modelo</th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')">Placa</th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')">Chassi</th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')">Motor</th>
                 <th>Pátio</th>
-                <th>Ações</th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')" class="text-end">Ações</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="moto : ${motorcycles}">
-                <td th:text="${moto.id}">1</td>
-                <td th:text="${moto.licensePlate}">ABC-1234</td>
-                <td th:text="${moto.chassis}">XYZ123</td>
                 <td th:text="${moto.model}">Honda</td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${moto.licensePlate}">ABC-1234</td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${moto.chassis}">XYZ123</td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${moto.engineNumber}">ENG-98765</td>
                 <td th:text="${moto.yard.name}">Pátio 1</td>
-                <td>
-                    <button class="btn btn-sm btn-info"
+                <td class="text-end">
+                    <button sec:authorize="isAuthenticated()"
+                            class="btn btn-outline-primary btn-sm"
                             th:hx-get="@{/motorcycle/{id}/details(id=${moto.id})}"
                             hx-target="#modalContent"
                             hx-swap="innerHTML"
                             data-bs-toggle="modal"
                             data-bs-target="#mainModal">
-                        Ver detalhes
+                        <i class="bi bi-eye"></i> Ver detalhes
                     </button>
                 </td>
             </tr>

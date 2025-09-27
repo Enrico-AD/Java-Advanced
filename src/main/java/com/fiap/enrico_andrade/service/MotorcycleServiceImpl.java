@@ -7,6 +7,7 @@ import com.fiap.enrico_andrade.entity.Model;
 import com.fiap.enrico_andrade.entity.Motorcycle;
 import com.fiap.enrico_andrade.entity.Status;
 import com.fiap.enrico_andrade.entity.Yard;
+import com.fiap.enrico_andrade.repository.ContractRepository;
 import com.fiap.enrico_andrade.repository.ModelRepository;
 import com.fiap.enrico_andrade.repository.MotorcycleRepository;
 import com.fiap.enrico_andrade.repository.StatusRepository;
@@ -23,17 +24,20 @@ public class MotorcycleServiceImpl implements MotorcycleService {
     private final StatusRepository statusRepository;
     private final YardRepository yardRepository;
     private final ModelRepository modelRepository;
+    private final ContractRepository contractRepository;
 
     public MotorcycleServiceImpl(
             MotorcycleRepository motorcycleRepository,
             StatusRepository statusRepository,
             YardRepository yardRepository,
-            ModelRepository modelRepository
+            ModelRepository modelRepository,
+            ContractRepository contractRepository
     ) {
         this.motorcycleRepository = motorcycleRepository;
         this.statusRepository = statusRepository;
         this.yardRepository = yardRepository;
         this.modelRepository = modelRepository;
+        this.contractRepository = contractRepository;
     }
 
     @Override
@@ -76,7 +80,8 @@ public class MotorcycleServiceImpl implements MotorcycleService {
         entity.setModel(model);
 
         if (dto.getYard() != null) {
-            Yard yard = new Yard();
+            Yard yard = yardRepository.findById(dto.getYard().getId())
+                    .orElseThrow(() -> new RuntimeException("Yard não encontrado"));
             yard.setId(dto.getYard().getId());
             entity.setYard(yard);
         }
@@ -124,9 +129,12 @@ public class MotorcycleServiceImpl implements MotorcycleService {
 
     @Override
     public void deleteById(Integer id) {
-        if (!motorcycleRepository.existsById(id)) {
-            throw new RuntimeException("Moto não encontrada: " + id);
+        boolean hasContract = contractRepository.existsByMotorcycleId(id);
+
+        if (hasContract) {
+            throw new IllegalStateException("Não é possível excluir a moto, pois ela está vinculada a um contrato.");
         }
+
         motorcycleRepository.deleteById(id);
     }
 

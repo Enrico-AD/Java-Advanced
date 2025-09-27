@@ -1,7 +1,5 @@
 <div th:fragment="motorcycle-form" xmlns:th="http://www.w3.org/1999/xhtml">
 
-    <div th:replace="fragments/error :: error-message"></div>
-
     <div class="modal-header">
         <h5 class="modal-title"
             th:text="${motorcycle.id != null ? 'Editar Moto ' + motorcycle.licensePlate : 'Nova Moto'}">
@@ -10,12 +8,11 @@
     </div>
 
     <form th:object="${motorcycle}"
-          th:action="@{${motorcycle.id} != null ? '/motorcycle/' + ${motorcycle.id} + '/update' : '/motorcycle/new'}"
           method="post"
-          hx-post="@{${motorcycle.id} != null ? '/motorcycle/' + ${motorcycle.id} + '/update' : '/motorcycle/new'}"
           hx-target="#motorcycles-list"
-          hx-swap="innerHTML"
-          data-bs-dismiss="modal">
+          th:attr="hx-post=${formAction}"
+          th:action="${formAction}"
+          hx-swap="innerHTML">
 
         <div class="modal-body">
             <input type="hidden" th:field="*{id}"/>

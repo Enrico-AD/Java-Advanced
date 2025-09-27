@@ -46,6 +46,10 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/motorcycle/list").permitAll()
                         .requestMatchers("/motorcycle/new", "/motorcycle/*/update", "/motorcycle/*/edit", "/motorcycle/new","/motorcycle/*/details", "/motorcycle/*/delete").authenticated()
+                        .requestMatchers("/models/list").permitAll()
+                        .requestMatchers("/models/new", "/models/*/update", "/models/*/edit", "/models/new","/models/*/details", "/models/*/delete").authenticated()
+                        .requestMatchers("/contract/list").permitAll()
+                        .requestMatchers("/contract/new", "/contract/*/update", "/contract/*/edit", "/contract/new","/contract/*/details", "/contract/*/delete").authenticated()
                         .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/login")

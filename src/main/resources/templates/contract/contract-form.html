@@ -1,20 +1,17 @@
 <div id="dialog" th:fragment="contract-edit-form" class="custom-modal-overlay" xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="custom-modal">
 
-        <div th:replace="fragments/error :: error-message"></div>
-
-        <div class="custom-modal-header">
-            <h2>Contrato [[${contract.contractNumber}]]</h2>
-            <button class="custom-close-btn" onclick="document.getElementById('dialog').innerHTML=''">✕</button>
+        <div class="modal-header">
+            <h5 class="modal-title">Contrato [[${contract.contractNumber}]]</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 
-        <div class="custom-modal-body">
-            <div class="custom-section">
-
-                <form th:object="${contract}"
-                      th:action="${contract.id} != null ? @{/contract/{id}/update(id=${contract.id})} : @{/contract/new}"
-                      method="post"
-                      onsubmit="submitContractForm(event, this)">
+        <form th:object="${contract}"
+              th:action="${contract.id} != null ? @{/contract/{id}/update(id=${contract.id})} : @{/contract/new}"
+              method="post"
+              hx-post="${contract.id} != null ? '/contract/' + ${contract.id} + '/update' : '/contract/new'"
+              hx-target="#contracts"
+              hx-swap="innerHTML">
 
                     <input type="hidden" th:field="*{id}" />
                     <input type="hidden" th:field="*{tenant.id}" />
