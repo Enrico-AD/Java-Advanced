@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: spring-bikeshed
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:mysql://${MYSQL_HOST}:3306/bike_shed
+      - key: SPRING_DATASOURCE_USERNAME
+        value: root
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromSecret: MYSQL_PASSWORD
+      - key: MYSQL_HOST
+        fromService:
+          type: pserv
+          name: mysql-bikeshed
+
+  - type: pserv
+    name: mysql-bikeshed
+    env: docker
+    plan: free
+    dockerfilePath: ./mysql/Dockerfile
+    disk:
+      name: mysql_data
+      mountPath: /var/lib/mysql
+      sizeGB: 1
