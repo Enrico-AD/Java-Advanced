@@ -10,8 +10,8 @@ services:
       - key: SPRING_DATASOURCE_URL
         value: jdbc:mysql://aws.connect.psdb.cloud/bike_shed?sslMode=VERIFY_IDENTITY
       - key: SPRING_DATASOURCE_USERNAME
-        value: k7rphtgerpvw713k0k8i
+        value: v0n6be9j1138zu5i2j6p
       - key: SPRING_DATASOURCE_PASSWORD
-        value: pscale_pw_lRqGm3vWlpwSETFsjq6IjtvFpk5ciGTAd6aKNDPTold
+        value: pscale_pw_zZSHnQg8nSdZfZK1WucVLMOxWPWROjIiGMKkA7uEybZ
       - key: SPRING_DATASOURCE_DRIVER_CLASS_NAME
         value: com.mysql.cj.jdbc.Driver
