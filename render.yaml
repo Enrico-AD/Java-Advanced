@@ -13,3 +13,5 @@ services:
         value: k7rphtgerpvw713k0k8i
       - key: SPRING_DATASOURCE_PASSWORD
         value: pscale_pw_lRqGm3vWlpwSETFsjq6IjtvFpk5ciGTAd6aKNDPTold
+      - key: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+        value: com.mysql.cj.jdbc.Driver
