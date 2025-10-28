@@ -107,7 +107,14 @@ senha: 123
 
 Usuário comum
 
-login: user
+## 🚀 Deploy no Railway
 
-senha: user123
+O projeto está hospedado no **[Railway](https://railway.app/)** — uma plataforma de cloud deployment que permite executar aplicações Spring Boot com MySQL de forma simples e automatizada.
 
+### 🔧 Configuração do serviço
+
+O Railway cria automaticamente dois serviços principais:
+- **Backend (Spring Boot)** — executa a aplicação Java.
+- **Banco de Dados (MySQL)** — usado como datasource principal da aplicação.
+
+https://spring-bikeshed-production.up.railway.app/
