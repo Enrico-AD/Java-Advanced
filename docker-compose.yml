@@ -17,8 +17,8 @@ services:
     container_name: spring-bikeshed
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bike_shed
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: admin123
+      SPRING_DATASOURCE_USERNAME: v0n6be9j1138zu5i2j6p
+      SPRING_DATASOURCE_PASSWORD: pscale_pw_zZSHnQg8nSdZfZK1WucVLMOxWPWROjIiGMKkA7uEybZ
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     ports:
       - "8080:8080"
