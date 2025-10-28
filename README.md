@@ -107,14 +107,91 @@ senha: 123
 
 Usuário comum
 
-## 🚀 Deploy no Railway
+## 🚀 Deploy no Railway (Spring Boot + MySQL)
 
-O projeto está hospedado no **[Railway](https://railway.app/)** — uma plataforma de cloud deployment que permite executar aplicações Spring Boot com MySQL de forma simples e automatizada.
+Este projeto pode ser implantado facilmente na [Railway](https://railway.app/) utilizando um serviço **Spring Boot** conectado a um **MySQL**.  
+Abaixo estão as etapas completas para configurar o deploy.
 
-### 🔧 Configuração do serviço
+---
 
-O Railway cria automaticamente dois serviços principais:
-- **Backend (Spring Boot)** — executa a aplicação Java.
-- **Banco de Dados (MySQL)** — usado como datasource principal da aplicação.
+### 🧩 1. Criar o projeto no Railway
 
-https://spring-bikeshed-production.up.railway.app/
+1. Acesse [railway.app](https://railway.app/).
+2. Clique em **New Project → Deploy from GitHub repo**.
+3. Selecione este repositório.
+4. Aguarde o Railway criar o ambiente automaticamente.
+
+---
+
+### 🗃️ 2. Adicionar o serviço MySQL
+
+1. No painel do projeto, clique em **+ New → Database → MySQL**.
+2. Após a criação, o Railway disponibiliza automaticamente as seguintes variáveis de ambiente:
+
+MYSQLHOST
+MYSQLPORT
+MYSQLUSER
+MYSQLPASSWORD
+MYSQLDATABASE
+
+yaml
+Copiar código
+
+3. Você pode visualizá-las na aba **Variables** do serviço MySQL.
+
+---
+
+### ⚙️ 3. Configurar o serviço Spring Boot
+
+1. Acesse o serviço da aplicação (ex: `spring-app`).
+2. Abra a aba **Variables** e adicione as seguintes variáveis de ambiente:
+
+| Variável | Valor |
+|-----------|-------|
+| `SPRING_DATASOURCE_DRIVER_CLASS_NAME` | `com.mysql.cj.jdbc.Driver` |
+| `SPRING_DATASOURCE_URL` | `jdbc:mysql://${MYSQLHOST}:${MYSQLPORT}/${MYSQLDATABASE}` |
+| `SPRING_DATASOURCE_USERNAME` | `${MYSQLUSER}` |
+| `SPRING_DATASOURCE_PASSWORD` | `${MYSQLPASSWORD}` |
+| `SPRING_PROFILES_ACTIVE` | `prod` |
+
+💡 **Dica:** o Railway permite usar as variáveis do serviço MySQL diretamente nas configurações da aplicação.
+
+---
+
+### 🧱 4. Ajustar o arquivo `application.properties`
+
+Garanta que seu arquivo `src/main/resources/application.properties`use as variáveis de ambiente, por exemplo:
+
+```properties
+    spring.datasource.driver-class-name=${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
+    spring.datasource.url=${SPRING_DATASOURCE_URL}
+    spring.datasource.username=${SPRING_DATASOURCE_USERNAME}
+    spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
+    
+    spring.jpa.hibernate.ddl-auto=update
+    spring.jpa.show-sql=false
+
+🔄 5. Fazer o deploy
+Após salvar as variáveis:
+
+Vá até o serviço Spring Boot.
+
+Clique em Deploy → Redeploy from GitHub.
+
+Aguarde o Railway detectar o projeto (Maven ou Gradle).
+
+Após a conclusão do build, clique em Open App para acessar sua aplicação online.
+
+✅ 6. Verificar logs e status
+Acompanhe a inicialização da aplicação na aba Logs.
+
+Confirme se a conexão com o banco de dados foi estabelecida com sucesso.
+
+📎 Exemplo prático
+.env
+    Copiar código
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+    SPRING_DATASOURCE_URL=jdbc:mysql://mysql.railway.internal:3306/railway
+    SPRING_DATASOURCE_USERNAME=root
+    SPRING_DATASOURCE_PASSWORD=dHlygLgOnddAavxEEpokDrowdqnYrOAu
+    SPRING_PROFILES_ACTIVE=prod
